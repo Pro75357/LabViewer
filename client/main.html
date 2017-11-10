@@ -31,7 +31,7 @@
     <div class="container bg-info text-white">
         <h3>Please select a server</h3>
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-9">
                 <form>
                     <select class="serverList">
                         <option value="null">Select one...</option>
@@ -41,8 +41,8 @@
                     </select>
                 </form>
             </div>
-            <div class="col-md-6">
-                Server: {{selectedName}}
+            <div class="col-md-3 bg-success">
+                Server: {{selectedServer}}
             </div>
         </div>
         
@@ -53,14 +53,18 @@
     <div class="container bg-info text-white">
         <h3>Please select a patient</h3>
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-9">
                 <form>
-                    <select class="patientList">
+                    <select name="list">
                         {{#each patients}}
                         <option value="{{@index}}">{{name}}</option>
                         {{/each}}
                     </select>
+                    <button type="submit">Go!</button>
                 </form>
+            </div>
+            <div class="col-md-3 bg-success">
+                Patient: {{selectedPatient}}
             </div>
         </div>
     </div>

@@ -18,10 +18,6 @@ var servers = [
     ]
 
 
-
-// Store this 
-Session.set('servers', servers)
-
 // Do the same for the patient list we will eventually create
 var patList = [
     { name: 'No patients yet', id: ''}
@@ -39,7 +35,7 @@ Template.serverSelect.helpers({
 
         return servers
     },
-    selectedName() {
+    selectedServer() {
         return Session.get('selectedServer').name // Since the selected server references an individual index from the above array, we can call the nested objects url and name directly. 
     }
 });
@@ -66,12 +62,20 @@ Template.serverSelect.events({
 Template.patientSelect.helpers({
     patients() {
         return Session.get('patientList')
+    },
+    selectedPatient() {
+        return Session.get('selectedPatient').name
     }
 })
 
 Template.patientSelect.events({
-    'form submit'(event, instance) {
+    'submit form'(event, instance) {
         event.preventDefault() // do not refresh the page
-
-    }
+        // Use the event.target.value (selected from dropdown) to get the single patient from the patientList
+        patIndex = event.target.list.value
+        patient = Session.get('patientList')[patIndex]
+        Session.set('selectedPatient', patient)
+        console.log(patient)
+        //Meteor.call
+    },
 })
