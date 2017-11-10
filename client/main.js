@@ -28,11 +28,39 @@ Session.set('patientList', patList)
 Session.set('selectedPatient', { name: 'No patient selected' })
 Session.set('selectedServer', { name: 'No Server selected' })
 
+// Create a blank Session variable for the observations
+
+Session.set('observations', 'nothing found yet')
+
+// Create some page control session variables
+
+Session.set('patListReady', false)
+Session.set('PatientReady', false)
+
+Template.body.helpers({
+    serverSelected() {
+        if (Session.get('patListReady')) {
+            return true
+        }
+    },
+    patientSelected() {
+        if (Session.get('PatientReady')) {
+            return true
+        }
+    }
+})
+
 
 Template.serverSelect.helpers({
+    bgcolor() {
+        if (Session.get('patListReady')) {
+            return 'bg-success'
+        } else {
+            return 'bg-danger'
+        }
+    },
     server() { //returns the values to populate the possible servers
         //should be an array of key:value pairs with url and name
-
         return servers
     },
     selectedServer() {
@@ -53,18 +81,36 @@ Template.serverSelect.events({
                 console.log(err)
             } else {
                 //console.log(res)
-                Session.set('patientList',res)
+                Session.set('patientList', res)
+                Session.set('patListReady', true)
             }
         })
     }
 })
 
 Template.patientSelect.helpers({
+    bgcolor() {
+        if (Session.get('selectedPatient').gender) {
+            return 'bg-success'
+        } else {
+            return 'bg-danger'
+        }
+    },
     patients() {
         return Session.get('patientList')
     },
-    selectedPatient() {
+    selectedPatientName() {
         return Session.get('selectedPatient').name
+    },
+    selectedPatientGender() {
+        return Session.get('selectedPatient').gender
+    },
+    selectedPatientAge() {
+        //todo - calculate patient age from DOB
+        return 'xx'
+    },
+    selectedPatientBirthDate() {
+        return Session.get('selectedPatient').birthDate
     }
 })
 
@@ -75,7 +121,33 @@ Template.patientSelect.events({
         patIndex = event.target.list.value
         patient = Session.get('patientList')[patIndex]
         Session.set('selectedPatient', patient)
-        console.log(patient)
-        //Meteor.call
+
+        // Now we need to fetch the lab observations. 
+        // To do this, we will need to send the patient ID and server URL to the method
+        // The method will return the data, then we can save that in a Session variable for later use.
+        url = Session.get('selectedServer').url
+        patID = Session.get('selectedPatient').id
+        Meteor.call('getObservations', url, patID, function (err, res) {
+            if (err) {
+                console.log(err)
+            } else {
+                //console.log(res)
+                Session.set('observations', res)
+                Session.set('patListReady', true)
+                Session.set('PatientReady', true)
+            }
+        })
     },
+})
+
+Template.observationsSummary.helpers({
+    total() {
+        return Session.get('observations').results
+    },
+    obsVomit() {
+        return JSON.stringify(Session.get('observations').entries, null, 2)
+    },
+    entries() {
+        return Session.get('observations').entries
+    }
 })

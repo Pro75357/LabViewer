@@ -6,7 +6,13 @@
     {{> header}}
     <br />
     {{> serverSelect}}
-    {{> patientSelect}}
+    {{#if serverSelected}}
+        {{> patientSelect}}
+        <br />
+        {{#if patientSelected}}
+            {{> observationsSummary}}
+        {{/if}}
+     {{/if}}
 </body>
 
 <template name="header">
@@ -23,13 +29,12 @@
               Once a patient is selected, laboratory information will be retrieved and viewable below
           </div>
       </div>
-
   </div>
 </template>
 
 <template name="serverSelect">
     <div class="container bg-info text-white">
-        <h3>Please select a server</h3>
+        <h3>Please select a test server</h3>
         <div class="row">
             <div class="col-md-9">
                 <form>
@@ -41,7 +46,7 @@
                     </select>
                 </form>
             </div>
-            <div class="col-md-3 bg-success">
+            <div class="col-md-3 {{bgcolor}}">
                 Server: {{selectedServer}}
             </div>
         </div>
@@ -63,9 +68,68 @@
                     <button type="submit">Go!</button>
                 </form>
             </div>
-            <div class="col-md-3 bg-success">
-                Patient: {{selectedPatient}}
+            <div class="col-md-3 {{bgcolor}}">
+                {{selectedPatientName}}
+                {{#if selectedPatientGender}}
+                    <br />
+                    {{selectedPatientAge}} year old {{selectedPatientGender}}
+                    <br />
+                    {{selectedPatientBirthDate}}
+                {{/if}}
             </div>
         </div>
     </div>
+</template>
+
+<template name="observationsSummary">
+    <div class="container">
+        Observations Found: {{total}}
+        <br />
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="pre-scrollable panel">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                    <td>name/code</td><td>Value</td><td>date/time</td>
+                    </tr>
+                </thead>
+                <tbody class="small">
+                    {{#each entries}}
+                    <tr>
+                        <td> {{resource.code.coding.[0].display}} - {{resource.code.coding.[0].code}} </td>
+                        <td>  {{resource.valueQuantity.value}}</td>
+                        <td> {{resource.effectiveDateTime}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+            <!--
+            <pre>
+                {{obsVomit}}
+            </pre>
+                -->
+                </div>
+        </div>
+        <div class="col-sm-6">
+            graph goes here
+        </div>
+    </div>
+    </div>
+</template>
+
+<template name="loader">
+    <!-- got loader from https://themeteorchef.com/tutorials/loading-patterns -->
+    <svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+         width="40px" height="40px" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;" xml:space="preserve">
+    <path fill="#000" d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z">
+    <animateTransform attributeType="xml"
+                      attributeName="transform"
+                      type="rotate"
+                      from="0 25 25"
+                      to="360 25 25"
+                      dur="0.6s"
+                      repeatCount="indefinite" />
+        </path>
+      </svg>
 </template>
