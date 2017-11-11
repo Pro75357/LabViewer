@@ -34,7 +34,7 @@
 
 <template name="serverSelect">
     <div class="container bg-info text-white">
-        <h3>Please select a test server</h3>
+        <h5>Please select a test server</h5>
         <div class="row">
             <div class="col-md-9">
                 <form>
@@ -56,7 +56,7 @@
 
 <template name="patientSelect">
     <div class="container bg-info text-white">
-        <h3>Please select a patient</h3>
+        <h5>Please select a patient</h5>
         <div class="row">
             <div class="col-md-9">
                 <form>
@@ -87,19 +87,19 @@
         <br />
     <div class="row">
         <div class="col-sm-6">
-            <div class="pre-scrollable panel">
+            <div class="pre-scrollable border-0">
             <table class="table table-striped">
                 <thead>
                     <tr>
-                    <td>name/code</td><td>Value</td><td>date/time</td>
+                    <td>Observation</td><td>Value</td><td>date/time</td>
                     </tr>
                 </thead>
                 <tbody class="small">
                     {{#each entries}}
                     <tr>
-                        <td> {{resource.code.coding.[0].display}} - {{resource.code.coding.[0].code}} </td>
-                        <td>  {{resource.valueQuantity.value}}</td>
-                        <td> {{resource.effectiveDateTime}}</td>
+                        <td> {{codeName}} </td>
+                        <td>  {{formatNumber value}}</td>
+                        <td> {{formatDate dateTime}}</td>
                     </tr>
                     {{/each}}
                 </tbody>
@@ -112,10 +112,16 @@
                 </div>
         </div>
         <div class="col-sm-6">
-            graph goes here
+            <div class="border-0">
+                {{> chartjs}}
+            </div>
         </div>
     </div>
     </div>
+</template>
+
+<template name="chartjs">
+       <canvas id="canvas" height="250" width="400"></canvas>
 </template>
 
 <template name="loader">

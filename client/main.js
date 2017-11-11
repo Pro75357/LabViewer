@@ -3,6 +3,8 @@ import { Session } from 'meteor/session';
 
 import './main.html';
 
+import '../imports/ui/client/chart.js'
+
 //Define a servers object in the global space so it can be easily referred to (name and url)
     // This could be pulled from an external source easily enough, but would have to be done on the server-side
 
@@ -142,12 +144,21 @@ Template.patientSelect.events({
 
 Template.observationsSummary.helpers({
     total() {
-        return Session.get('observations').results
+        return Session.get('observations').length
     },
     obsVomit() {
-        return JSON.stringify(Session.get('observations').entries, null, 2)
+        return JSON.stringify(Session.get('observations'), null, 2)
     },
     entries() {
-        return Session.get('observations').entries
+        return Session.get('observations')
     }
+})
+
+
+Template.registerHelper('formatDate', function (date) {
+    return moment(date).format('l, LT');
+});
+
+Template.registerHelper('formatNumber', function (number) {
+    return parseFloat(Math.round(number * 100) / 100).toFixed(2)
 })
