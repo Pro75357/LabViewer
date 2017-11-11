@@ -67,7 +67,6 @@ Template.chartjs.helpers({
             myChart.datasets[1].points[0].value = Session.get('counter_1_1');
             chartData.labels[0] = Session.get('label_1');
             myChart.datasets[0].points[0].label = Session.get('label_1');
-
             myChart.update();
 
         }
