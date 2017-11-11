@@ -1,5 +1,7 @@
 //Server-side only methods for handling REST/FHIR api calls
 
+import { Obs } from '../Observations.js'
+
 Meteor.methods({
 	'getPatients': function (endpoint) {
 		patientEndpoint = endpoint + '/Patient'
@@ -81,7 +83,10 @@ Meteor.methods({
 		}
 	},
 
-	'getObservations': function(endpoint, patId) {
+    'getObservations': function (endpoint, patId) {
+        // first, drop any old observations from the collection 
+        Meteor.call('resetDB')
+
 		ObsEndpoint = endpoint + '/Observation'
 		try {
 			res = HTTP.call(
@@ -105,8 +110,9 @@ Meteor.methods({
 				console.log(e)
 			}
 
-			if (!res.data.entry) { // if no data gracefully return zero results.
-				return []
+            if (!res.data.entry) { // if no data gracefully return zero results.
+                Obs.insert({})
+				return true
 			}
 
 			//return { results: res.data.entry.length, entries: res.data.entry } 
@@ -115,6 +121,66 @@ Meteor.methods({
             // This is similar to how we handle the patient search above
             results = []
             for (x in res.data.entry){
+                pre = res.data.entry[x].resource
+                //Use a try/catch so we don't just crash
+                try {
+                    Obs.insert({
+                        codeName: pre.code.coding[0].display,
+                        code: pre.code.coding[0].code,
+                        value: pre.valueQuantity.value, // need to trim this to 2 decimal places, otherwise looks crappy.
+                        dateTime: new Date(pre.effectiveDateTime),
+                       // endpoint: endpoint,
+                       // patId: patId
+                    })
+                } catch (e) {
+                    //console.log(e)
+                    // Some results will not have a single value (blood pressures) and will end up here. Since we are looking at labs we don't care. Just log and move on.
+                    console.log('no value for entry '+x+' - '+pre.code.coding[0].display)
+                }
+            }
+            return true
+		} catch (e) {
+			console.log(e)
+			// handle 401 (not authroized) here
+		}
+    },
+    /*
+    //getOneCode takes the code that was selected from the table and returns only those matches. Saves me from doing the database work. 
+    'getOneCode': function (endpoint, patId, code) {
+        ObsEndpoint = endpoint + '/Observation'
+        try {
+            res = HTTP.call(
+                'GET',
+                ObsEndpoint, {
+                    params: {
+                        patient: patId,
+                        code: code
+                        //category: 'laboratory' // hard-code this to just return laboratory data
+                        //category: 'vital-signs' //
+                    },
+                    headers: {
+                        Accept: 'application/json, application/json+fhir'
+                    }
+                })
+            // console.dir(res)
+            try { // use try/catch because if the content is not JSON it will fail. 
+                if (!res.data) {
+                    res.data = JSON.parse(res.content)
+                }
+            } catch (e) {
+                console.log(e)
+            }
+
+            if (!res.data.entry) { // if no data gracefully return zero results.
+                return []
+            }
+
+            //return { results: res.data.entry.length, entries: res.data.entry } 
+            // The fhir-formatted data is ugly and hard to parse through on client-side helpers.
+            // For simplicity, we will go ahead and parse out the data we want for this particular patient, and pass the simpler, cleaner object to the client.
+            // This is similar to how we handle the patient search above
+            results = []
+            for (x in res.data.entry) {
                 pre = res.data.entry[x].resource
                 //Use a try/catch so we don't just crash
                 try {
@@ -127,16 +193,17 @@ Meteor.methods({
                 } catch (e) {
                     //console.log(e)
                     // Some results will not have a single value (blood pressures) and will end up here. Since we are looking at labs we don't care. Just log and move on.
-                    console.log('no value for entry '+x+' - '+pre.code.coding[0].display)
+                    console.log('no value for entry ' + x + ' - ' + pre.code.coding[0].display)
                 }
             }
             return results
-            
 
-       
-		} catch (e) {
-			console.log(e)
-			// handle 401 (not authroized) here
-		}
-	},
+
+
+        } catch (e) {
+            console.log(e)
+            // handle 401 (not authroized) here
+        }
+    */
+    
 })

@@ -2,8 +2,8 @@ import { Template } from 'meteor/templating';
 import { Session } from 'meteor/session';
 
 import './main.html';
-
-import '../imports/ui/client/chart.js'
+import { Obs } from '../imports/api/Observations.js'
+import '../imports/ui/makeChart.js'
 
 //Define a servers object in the global space so it can be easily referred to (name and url)
     // This could be pulled from an external source easily enough, but would have to be done on the server-side
@@ -131,28 +131,33 @@ Template.patientSelect.events({
         // The method will return the data, then we can save that in a Session variable for later use.
         url = Session.get('selectedServer').url
         patID = Session.get('selectedPatient').id
-        Meteor.call('getObservations', url, patID, function (err, res) {
-            if (err) {
-                console.log(err)
-            } else {
-                //console.log(res)
-                Session.set('observations', res)
-                Session.set('patListReady', true)
-                Session.set('PatientReady', true)
-            }
-        })
+        Meteor.call('getObservations', url, patID) 
+        Session.set('patListReady', true)
+        Session.set('PatientReady', true)
     },
 })
 
 Template.observationsSummary.helpers({
     total() {
-        return Session.get('observations').length
+        //return Session.get('observations').length
+        res = Obs.find({}).fetch()
+        return res.length
     },
-    obsVomit() {
-        return JSON.stringify(Session.get('observations'), null, 2)
+    obsVomit() { // for debugging, not used currently
+        //return JSON.stringify(Session.get('observations'), null, 2)
+        res = Obs.find({}).fetch()
+        return JSON.stringify(res, null, 2)
     },
     entries() {
-        return Session.get('observations')
+        //return Session.get('observations')
+        return Obs.find({}).fetch()
+    }
+})
+
+Template.observationsSummary.events({
+    'click .obsrow': function (event, template) {
+       // Meteor.call('getOneCode', this.endpoint, this.patId, this.code,)       
+        Session.set('code',this.code)
     }
 })
 
