@@ -157,7 +157,8 @@ Template.observationsSummary.helpers({
 Template.observationsSummary.events({
     'click .obsrow': function (event, template) {
        // Meteor.call('getOneCode', this.endpoint, this.patId, this.code,)       
-        Session.set('code',this.code)
+        Session.set('code', this.code)
+        updateChart(code)
     }
 })
 

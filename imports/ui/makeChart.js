@@ -1,62 +1,93 @@
-import {Obs} from '../api/Observations.js'
+import { Obs } from '../api/Observations.js'
+import Chart from 'chart.js'
 
 // We will use chart.js to make the chart.
 // this allows us to easily make charts with the provided data values
 // the challenge will be to have the chart reactive, based on user-selected values. 
 
-// First, we will need to define the session variables that will populate the labels (x-axis) and datasets (y-axis)
-// the labels are simply an array of strings. Since we want our X-axis to be dates, we will use the date/time values from the FHIR data to create this array. For now, we just make a default array
-Session.setDefault('chartLabels',[1,2,3,4,5,6])
-
-// Next, we need an array of datasets. datasets are objects with many values used by chartJS to create the chart.
-datasets = []
-    // lets make a default dataset object. Essentially a template object we can re-use.
-datasetobject = {
-    label: "dataset Template",
-    fillColor: "rgba(220,220,220,0.2)",
-    strokeColor: "green",
-    pointColor: "rgba(220,220,220,1)",
-    pointStrokeColor: "#fff",
-    pointHighlightFill: "#fff",
-    pointHighlightStroke: "rgba(220,220,220,1)",
-    data: []  // needs to be empty else we have to empty it first.
-}
-
-datasets.push(datasetobject)// this loads the first dataset into the session variable.
-
-// then we'll save that as our first dataset session variable'
-Session.set('datasets',datasets) 
-
-// First time the chart is created in the .onRendered hook of the template
-// After that the chart is updated in .helpers of the template
-Session.setDefault('myChartIsCreated', false);
-
-// Create object chartData with initial values
-var chartData = {
-    labels: Session.get('chartLabels'),
-    datasets: Session.get('datasets')
-};
 
 Template.chartjs.onRendered(function () {
-    // Render the chart
-    myChart = new Chart(document.getElementById("canvas").getContext("2d")).Line(chartData, {
-        responsive: true
-    });
-    Session.set('myChartIsCreated', true);
+    // Once the patient is selected, this gets rendered. Here we will first create the chart object with some placeholder data. 
+    // See the documentation at: http://www.chartjs.org/docs/latest/
+
+    // The Chart object builds from two main variables. One, the canvas object, which we will get and define here
+    canvas = document.getElementById("canvas").getContext("2d")
+    
+/*   and Two, the data/labels/options object. I'll call it "config"
+    Here is an example template of the whole thing.
+    
+var config {
+    type: 'line',
+    data: data,
+    options: options
+}
+    */
+
+// so, before we can build that we need to define each component. The type is easy. Here we want a line. NTD.
+    // The data object is a little more complex. It has many optional objects that define what the chart will look like. 
+    /* Example data object:
+    data: {
+        labels: ["January", "February", "March", "April", "May", "June", "July"],
+        datasets: [{
+            label: "My First dataset",
+            backgroundColor: 'rgb(255, 99, 132)',
+            borderColor: 'rgb(255, 99, 132)',
+            data: [0, 10, 5, 2, 20, 30, 45],
+        }]
+    },
+    */
+    // As you can see, a basic line chart will need two main data objects- labels, and datasets. 
+        // labels is a basic array that stores the Y-axis categories. We can go ahead and define it with some placeholder values here
+    var labels = [1, 2, 3, 4, 5, 6]
+
+    // the datasets is an array of objects that each define an individual plot. Each object in datasets contains at least the following 
+        // data: an array of data elements. this will map to the Y axis categories based on the index of the array.
+        // label: not sure if required. Just labels this individual dataset. 
+        // This also contains many optional components such as fillColor. 
+        // Let's go ahead and define an empty dataset array
+    datasets = []
+
+        // Now lets make a default dataset object. Essentially a template object we can re-use. Pretty colors included. 
+    datasetobject = {
+        label: "dataset Template",
+        fillColor: "rgba(220,220,220,0.2)",
+        strokeColor: "green",
+        pointColor: "rgba(220,220,220,1)",
+        pointStrokeColor: "#fff",
+        pointHighlightFill: "#fff",
+        pointHighlightStroke: "rgba(220,220,220,1)",
+        data: [1, 2, 3, 3, 3, 3]  // Just someplaceholder data
+    }
+        // Almost there- we need to insert this object into our datasets array. The array method push lets us easily do that.
+    datasets.push(datasetobject)
+
+    // Now that we have labels, and datasets we can build the top-level data object
+    data = {
+        labels,
+        datasets
+    }
+
+    // The last top-level config object is options. For now, let's just use the default options and leave it out.
+        //     var options = {}
+    //
+
+    // Finally, we have everything we need to build our config object. 
+
+    var config = {
+        type: 'line',
+        data: data,
+        options: {} // note here I just leave it blank.
+    }
+
+    // Now that we have our canvas object and config object defined, we can actually build the Chart.  
+
+    myChart = new Chart(canvas, config)
 });
 
-Template.chartjs.helpers({
 
-    chartUpdate: function () {
+// Here we can update the chart object based on the passed code (which lets us pick a data type)
+function updateChart(code) {
 
-        if (Session.get('myChartIsCreated')) {
-
-            /*
-            myChart.datasets[0].points[0].value = Session.get('counter_0_1');
-            myChart.datasets[1].points[0].value = Session.get('counter_1_1');
-            chartData.labels[0] = Session.get('label_1');
-            myChart.datasets[0].points[0].label = Session.get('label_1');
-            */
             // first collect the data we need. Labels and Data. Both come from the Obs collection, findable using the passed code
             obs = Obs.find({ code: code }).fetch()
 
@@ -90,14 +121,7 @@ Template.chartjs.helpers({
 
         }
 
-    }
-
-});
 
 Template.chartjs.events({
 
 });
-
-    function updateChart(code) {
-
-    }

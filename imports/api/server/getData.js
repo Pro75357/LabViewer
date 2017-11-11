@@ -3,7 +3,10 @@
 import { Obs } from '../Observations.js'
 
 Meteor.methods({
-	'getPatients': function (endpoint) {
+    'getPatients': function (endpoint) {
+        // first, drop any old observations from the collection 
+        Meteor.call('resetDB')
+
 		patientEndpoint = endpoint + '/Patient'
 		try {
 			res = HTTP.call(
