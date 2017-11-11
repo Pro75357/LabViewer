@@ -108,8 +108,10 @@ Template.patientSelect.helpers({
         return Session.get('selectedPatient').gender
     },
     selectedPatientAge() {
-        //todo - calculate patient age from DOB
-        return 'xx'
+        // calculate patient age from DOB
+        dob = Session.get('selectedPatient').birthDate
+        years = moment().diff(dob, 'years')
+        return years
     },
     selectedPatientBirthDate() {
         return Session.get('selectedPatient').birthDate

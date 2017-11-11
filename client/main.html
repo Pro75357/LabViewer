@@ -17,7 +17,7 @@
 <template name="header">
   <div class="container text-white" style="background: #002638; color: white">
       <div class='pull-right'>
-          <a href="Http://dmice.ohsu.edu" target="_blank"><img src="images/OHSU-Black-Small.jpg" alt='OHSU DMICE' style='width:75px; height:75px'></a>
+          <a href="Http://dmice.ohsu.edu" target="_blank"><img src="images/OHSU-Black-Small.jpg" alt='OHSU DMICE' style='width:50px; height:50px'></a>
       </div>
       <h1>Welcome to LabViewer!</h1>
       <div class="row small">
@@ -36,9 +36,9 @@
 
 <template name="serverSelect">
     <div class="container bg-info text-white">
-        <h5>Please select a test server</h5>
-        <div class="row">
+        <div class="row vertical-align">
             <div class="col-md-9">
+                <h5>Please select a test server</h5>
                 <form>
                     <select class="serverList">
                         <option value="null">Select one...</option>
@@ -58,9 +58,9 @@
 
 <template name="patientSelect">
     <div class="container bg-info text-white">
-        <h5>Please select a patient</h5>
-        <div class="row">
+        <div class="row vertical-align">
             <div class="col-md-9">
+                <h5>Please select a patient</h5>
                 <form>
                     <select name="list">
                         {{#each patients}}
