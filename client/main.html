@@ -115,6 +115,10 @@
         </div>
         <div class="col-sm-6">
             <div class="border-0">
+                {{#if graphReady}}
+                {{else}}
+                    Choose a value to graph!
+                {{/if}}
                 {{> chartjs}}
             </div>
         </div>
@@ -123,7 +127,9 @@
 </template>
 
 <template name="chartjs">
-       <canvas id="canvas" height="250" width="400"></canvas>
+    <div class="container-fluid">
+        <canvas id="canvas"></canvas>
+    </div>
 </template>
 
 <template name="loader">

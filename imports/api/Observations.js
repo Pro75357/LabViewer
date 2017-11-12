@@ -2,12 +2,9 @@ import { Mongo } from 'meteor/mongo'
 
 export const Obs = new Mongo.Collection('obs');
 
-if (Meteor.isClient) {
-	Meteor.subscribe('obs') // Makes the collection available to the client (Templates and stuff)
-};
 
 if (Meteor.isServer) {
-	Meteor.publish('obs', function codesPublication() {
+	Meteor.publish('obs', function () {
 		return Obs.find({}) // how we publish codes to the client. For now, just return everything. 
 	})
 
@@ -17,3 +14,7 @@ if (Meteor.isServer) {
 		}
 	})
 }
+
+if (Meteor.isClient) {
+    Meteor.subscribe('obs') // Makes the collection available to the client (Templates and stuff)
+};

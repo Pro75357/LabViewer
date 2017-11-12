@@ -1,5 +1,6 @@
 import { Template } from 'meteor/templating';
 import { Session } from 'meteor/session';
+import Chart from 'chart.js'
 
 import './main.html';
 import { Obs } from '../imports/api/Observations.js'
@@ -35,7 +36,8 @@ Session.set('selectedServer', { name: 'No Server selected' })
 Session.set('observations', 'nothing found yet')
 
 // Create some page control session variables
-
+Session.set('graphReady', false)
+Session.set('chartRendered', false)
 Session.set('patListReady', false)
 Session.set('PatientReady', false)
 
@@ -131,34 +133,61 @@ Template.patientSelect.events({
         // The method will return the data, then we can save that in a Session variable for later use.
         url = Session.get('selectedServer').url
         patID = Session.get('selectedPatient').id
-        Meteor.call('getObservations', url, patID) 
+        Meteor.call('getObservations', url, patID, function (err, res) {
+            if (err) {
+                console.log(err)
+            } else {
+                Session.set('dataReady', true)
+            }
+        })
         Session.set('patListReady', true)
         Session.set('PatientReady', true)
     },
 })
 
+
 Template.observationsSummary.helpers({
     total() {
         //return Session.get('observations').length
-        res = Obs.find({}).fetch()
-        return res.length
+        if (Session.get('dataReady')) {
+            res = Obs.find({}).fetch()
+            return res.length
+        }
+        
     },
     obsVomit() { // for debugging, not used currently
         //return JSON.stringify(Session.get('observations'), null, 2)
-        res = Obs.find({}).fetch()
-        return JSON.stringify(res, null, 2)
+        if (Session.get('dataReady')) {
+            res = Obs.find({}).fetch()
+            return JSON.stringify(res, null, 2)
+        }
     },
     entries() {
         //return Session.get('observations')
-        return Obs.find({}).fetch()
+        //return Session.get('obsTable')
+        if (Session.get('dataReady')) {
+            return Obs.find({}, { sort: { dateTime: -1 } }).fetch()
+        }
+    },
+    graphReady() {
+        return Session.get('graphReady')
     }
 })
 
+
+
 Template.observationsSummary.events({
     'click .obsrow': function (event, template) {
+        Session.set('graphReady', true)
+        code = this.code
        // Meteor.call('getOneCode', this.endpoint, this.patId, this.code,)       
-        Session.set('code', this.code)
+        Session.set('code', code)
+        // Update the chart with this code
+
         updateChart(code)
+        // Sort the table by code, this one on top
+            // todo 
+        //Session.set('obsTable', Obs.find({code: code}).fetch())
     }
 })
 
