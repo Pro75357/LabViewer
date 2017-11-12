@@ -16,8 +16,9 @@ var servers = [
     { url: 'https://syntheticmass.mitre.org/fhir', name: 'Synthetic Mass' },
     { url: 'http://spark.furore.com/fhir', name: 'Furore Spark' },
     { url: 'https://sb-fhir-dstu2.smarthealthit.org/api/smartdstu2/open', name: 'SmartHealthIT' },
-    { url: 'http://wildfhir.aegis.net/fhir3-0-1', name: 'AEGIS WildFHIR' },
-    { url: 'https://tbxweb.aidbox.io/fhir', name: 'Tbx Aidbox' },
+    //{ url: 'http://wildfhir.aegis.net/fhir3-0-1', name: 'AEGIS WildFHIR' },
+    //{ url: 'https://fhirtest.uhn.ca/baseDstu3', name: 'Hapi-FHIR' },
+    //{ url: 'http://api.hackathon.siim.org/fhir/', name: 'SIIM Hackathon'}
     ]
 
 
