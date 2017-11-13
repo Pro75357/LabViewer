@@ -1,0 +1,197 @@
+<head>
+  <title>LabViewer</title>
+</head>
+
+<body>
+    {{> header}}
+    {{> serverSelect}}
+    {{#if serverSelected}}
+        {{> patientSelect}}
+        <br />
+        {{#if patientSelected}}
+            {{> observationsSummary}}
+        {{/if}}
+     {{/if}}
+    {{> todo}}
+</body>
+
+<template name="header">
+  <div class="container text-white" style="background: #002638; color: white">
+      <div class='pull-right'>
+          <a href="Http://dmice.ohsu.edu" target="_blank"><img src="images/OHSU-Black-Small.jpg" alt='OHSU DMICE' style='width:50px; height:50px'></a>
+      </div>
+      <h1>Welcome to LabViewer!</h1>
+      <div class="row small">
+          <div class="col-md-4">
+              This application demonstrates the ability to view laboratory data from across a variety of data sources using the FHIR standard.
+          </div>
+          <div class="col-md-4">
+              First, select a FHIR server (open servers only) and then search for a patient.
+          </div>
+          <div class="col-md-4">
+              Once a patient is selected, laboratory information will be retrieved and viewable below
+          </div>
+      </div>
+  </div>
+</template>
+
+<template name="serverSelect">
+    <div class="container bg-info text-white">
+        <div class="row vertical-align">
+            <div class="col-md-9">
+                <h5>Please select a test server</h5>
+                <form>
+                    <select class="serverList">
+                        <option value="null">Select one...</option>
+                        {{#each server}}
+                        <option value="{{@index}}">{{name}}</option>
+                        {{/each}}
+                    </select>
+                </form>
+            </div>
+            <div class="col-md-3 {{bgcolor}}">
+                Server: {{selectedServer}}
+            </div>
+        </div>
+        
+    </div>
+</template>
+
+<template name="patientSelect">
+    <div class="container bg-info text-white">
+        <div class="row vertical-align">
+            <div class="col-md-9">
+                <h5>Please select a patient</h5>
+                <form>
+                    <select name="list">
+                        {{#each patients}}
+                        <option value="{{@index}}">{{name}}</option>
+                        {{/each}}
+                    </select>
+                    <button type="submit">Go!</button>
+                </form>
+            </div>
+            <div class="col-md-3 {{bgcolor}}">
+                {{selectedPatientName}}
+                {{#if selectedPatientGender}}
+                    <br />
+                    {{selectedPatientAge}} year old {{selectedPatientGender}}
+                    <br />
+                    {{selectedPatientBirthDate}}
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="observationsSummary">
+    <div class="container">
+        Observations Found: {{total}}
+        <br />
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="pre-scrollable border-0">
+            <table class="table table-hover table-bordered table-condensed table-responsive">
+                <thead>
+                    <tr>
+                    <td>Observation</td><td>Value</td><td>date/time</td>
+                    </tr>
+                </thead>
+                <tbody class="small">
+                    {{#each entries}}
+                    <tr class="obsrow">
+                        <td> {{codeName}} </td>
+                        <td>  {{formatNumber value}}</td>
+                        <td> {{formatDate dateTime}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+            <!--
+            <pre>
+                {{obsVomit}}
+            </pre>
+                -->
+                </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="border-0">
+                {{#if graphReady}}
+                {{else}}
+                    Choose a value to graph!
+                {{/if}}
+                {{> chartjs}}
+            </div>
+        </div>
+    </div>
+    </div>
+</template>
+
+<template name="chartjs">
+    <div class="container-fluid">
+        <canvas id="canvas" style="padding:20px;"></canvas>
+    </div>
+</template>
+
+<template name="todo">
+    <div class="container-fluid pull-right pull-down">
+        <h5>App to-do/wishlist</h5>
+        <ul>
+            <li>
+               Y axis scale based on pulled reference ranges
+            </li>
+            <li>
+                Y axis scale label based pulled reference unit
+            </li>
+            <li>
+                Fix Y axis values sometimes being cut off
+            </li>
+            <li>
+                Graph colors to indicate high/low/normal values (based on reference ranges)
+            </li>
+            <li>
+                Multi-dataset graph (checkboxes in table)
+            </li>
+            <li>
+                Auto-lab group/favorite buttons (CBC, BMP, weight + BMI, glucose + A1c, BUN/cr)
+            </li>
+            <li>
+                Filter/separate vitals from labs
+            </li>
+            <li>
+                Include complex measurements (Blood Pressure)
+            </li>
+            <li>
+                Obs table highlights and re-arranges based on selection
+            </li>
+            <li>
+                Obs table groups
+            </li>
+            <li>
+                Better servers & quick-buttons straight to good demo patients 
+            </li>
+            <li>
+                Infobuttons
+            </li>
+            <li>
+                Filter Obs calls based on user session (multi-user ability)
+            </li>
+        </ul>
+    </div>
+</template>
+
+<template name="loader">
+    <!-- got loader from https://themeteorchef.com/tutorials/loading-patterns -->
+    <svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+         width="40px" height="40px" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;" xml:space="preserve">
+    <path fill="#000" d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z">
+    <animateTransform attributeType="xml"
+                      attributeName="transform"
+                      type="rotate"
+                      from="0 25 25"
+                      to="360 25 25"
+                      dur="0.6s"
+                      repeatCount="indefinite" />
+        </path>
+      </svg>
+</template>
