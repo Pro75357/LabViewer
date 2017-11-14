@@ -32,6 +32,7 @@ Session.set('patientList', patList)
 Session.set('selectedPatient', { name: 'No patient selected' })
 Session.set('selectedServer', { name: 'No Server selected' })
 
+
 // Create a blank Session variable for the observations
 
 Session.set('observations', 'nothing found yet')
@@ -52,6 +53,9 @@ Template.body.helpers({
         if (Session.get('PatientReady')) {
             return true
         }
+    },
+    graphReady() {
+        return Session.get('graphReady')
     }
 })
 
@@ -138,6 +142,15 @@ Template.patientSelect.events({
             if (err) {
                 console.log(err)
             } else {
+                Obs.remove({}) // remove any old results
+                try {
+                    for (x in res) {
+                        console.log(res[x])
+                        Obs.insert(res[x])
+                    }
+                } catch (e) {
+                    console.log(e)
+                }
                 Session.set('dataReady', true)
             }
         })
@@ -151,8 +164,8 @@ Template.observationsSummary.helpers({
     total() {
         //return Session.get('observations').length
         if (Session.get('dataReady')) {
-            res = Obs.find({}).fetch()
-            return res.length
+            ///res = Obs.find({}).fetch()
+            return Obs.find({}).fetch().length
         }
         
     },
@@ -170,9 +183,6 @@ Template.observationsSummary.helpers({
             return Obs.find({}, { sort: { dateTime: -1 } }).fetch()
         }
     },
-    graphReady() {
-        return Session.get('graphReady')
-    }
 })
 
 

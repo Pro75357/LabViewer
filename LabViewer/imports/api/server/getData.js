@@ -117,21 +117,23 @@ Meteor.methods({
 				console.log(e)
 			}
 
+            results = []
+
             if (!res.data.entry) { // if no data gracefully return zero results.
-                Obs.insert({})
-				return true
+                results.push({})
+				return results
 			}
 
 			//return { results: res.data.entry.length, entries: res.data.entry } 
             // The fhir-formatted data is ugly and hard to parse through on client-side helpers.
             // For simplicity, we will go ahead and parse out the data we want for this particular patient, and pass the simpler, cleaner object to the client.
             // This is similar to how we handle the patient search above
-            results = []
+
             for (x in res.data.entry){
                 pre = res.data.entry[x].resource
                 //Use a try/catch so we don't just crash
                 try {
-                    Obs.insert({
+                    results.push({
                         codeName: pre.code.coding[0].display,
                         code: pre.code.coding[0].code,
                         value: pre.valueQuantity.value, // need to trim this to 2 decimal places, otherwise looks crappy.
@@ -144,8 +146,9 @@ Meteor.methods({
                     // Some results will not have a single value (blood pressures) and will end up here. Since we are looking at labs we don't care. Just log and move on.
                     console.log('no value for entry '+x+' - '+pre.code.coding[0].display)
                 }
+
             }
-            return true
+            return results
 		} catch (e) {
 			console.log(e)
 			// handle 401 (not authroized) here

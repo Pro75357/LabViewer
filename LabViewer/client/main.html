@@ -9,7 +9,22 @@
         {{> patientSelect}}
         <br />
         {{#if patientSelected}}
-            {{> observationsSummary}}
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <!-- left sided content-->
+                        {{> observationsSummary}}
+                    </div>
+                    <div class="col-sm-8">
+                        <!-- right-sided main content -->
+                        {{#if graphReady}}
+                        {{else}}
+                        Choose a value to graph!
+                        {{/if}}
+                        {{> chartjs}}
+                    </div>
+                </div>
+            </div>
         {{/if}}
      {{/if}}
     {{> todo}}
@@ -85,11 +100,8 @@
 </template>
 
 <template name="observationsSummary">
-    <div class="container">
         Observations Found: {{total}}
         <br />
-    <div class="row">
-        <div class="col-sm-6">
             <div class="pre-scrollable border-0">
             <table class="table table-hover table-bordered table-condensed table-responsive">
                 <thead>
@@ -112,19 +124,7 @@
                 {{obsVomit}}
             </pre>
                 -->
-                </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="border-0">
-                {{#if graphReady}}
-                {{else}}
-                    Choose a value to graph!
-                {{/if}}
-                {{> chartjs}}
             </div>
-        </div>
-    </div>
-    </div>
 </template>
 
 <template name="chartjs">
@@ -174,7 +174,7 @@
                 Infobuttons
             </li>
             <li>
-                Filter Obs calls based on user session (multi-user ability)
+                DONE: Filter Obs calls based on user session (multi-user ability)
             </li>
         </ul>
     </div>
