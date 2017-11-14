@@ -133,18 +133,23 @@ Meteor.methods({
                 pre = res.data.entry[x].resource
                 //Use a try/catch so we don't just crash
                 try {
-                    results.push({
-                        codeName: pre.code.coding[0].display,
-                        code: pre.code.coding[0].code,
-                        value: pre.valueQuantity.value, // need to trim this to 2 decimal places, otherwise looks crappy.
-                        dateTime: new Date(pre.effectiveDateTime),
-                       // endpoint: endpoint,
-                       // patId: patId
-                    })
+                    if(pre.valueQuantity.value){ // if there is an individual value, we will use that
+                        results.push({
+                            codeName: pre.code.coding[0].display,
+                            code: pre.code.coding[0].code,
+                            value: pre.valueQuantity.value, // need to trim this to 2 decimal places, otherwise looks crappy.
+                            dateTime: new Date(pre.effectiveDateTime),
+                           // endpoint: endpoint,
+                           // patId: patId
+                        })
+                    } else {
+                        // if there is not an individual value (like a BP) we need to do more logic...
+                        // for now just do nothing
+                    }
                 } catch (e) {
-                    //console.log(e)
+                    console.log(e)
                     // Some results will not have a single value (blood pressures) and will end up here. Since we are looking at labs we don't care. Just log and move on.
-                    console.log('no value for entry '+x+' - '+pre.code.coding[0].display)
+                    //console.log('no value for entry '+x+' - '+pre.code.coding[0].display)
                 }
 
             }
