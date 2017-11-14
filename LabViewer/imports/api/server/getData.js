@@ -83,7 +83,7 @@ Meteor.methods({
 			return patList
 
 		} catch (e) {
-			console.log(e)
+			//console.log(e)
 			// if the server throws crap, we just return:
             patList.push({ name: 'No patients found!', id: '' })
             return patList // and thus stop here.
