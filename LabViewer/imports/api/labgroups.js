@@ -67,9 +67,9 @@ vitals = {
 
 // for the 'everything else' function
 // first, store an array of lab groups
-labGroups = [hematology, chemPanel, lipidPanel, chemOther, vitals]
+labGroups = { hematology, chemPanel, lipidPanel, chemOther, vitals }
 
-// Now, iterate through that list and generate a list of all codes (to be used for an exclusion list)
+// Now, iterate through that list and generate a list of all codes (to be used for an exclusion list) in a single array
 
 allCodes= []
 
@@ -82,4 +82,18 @@ for (x in labGroups) {
     }
 }
 
-//console.dir(allCodes)
+// For group counts we will need all codes from an entire group in a single array i.e. Hematology.all
+// Note we CANNOT do this BEFORE the allCodes function above... else it will loop!
+
+for (x in labGroups) {
+    for (y in labGroups[x]) {
+        if (!labGroups[x].all) { // if the array does not exist (and it will not the first loop) - create it. Else, don't overwrite what whas there.
+            labGroups[x].all = []
+        }
+        for (z in labGroups[x][y]) {
+            labGroups[x].all.push(labGroups[x][y][z])
+        }
+    }
+}
+
+console.dir(labGroups)

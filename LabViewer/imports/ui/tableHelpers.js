@@ -4,7 +4,26 @@ import '../api/labgroups.js'
 
 Template.labTables.helpers({
     // Here we will make helpers for the entire lab table- mostly group counts
+    // Hematology group counts
+    hematologyCount() {
+        return Obs.find({ 'resource.code.coding.0.code': { $in: labGroups.hematology.all } }).fetch().length
+    },
 
+    chemPanelCount() {
+        return Obs.find({ 'resource.code.coding.0.code': { $in: labGroups.chemPanel.all } }).fetch().length
+    },
+
+    chemOtherCount() {
+        return Obs.find({ 'resource.code.coding.0.code': { $in: labGroups.chemOther.all } }).fetch().length
+    },
+
+    lipidPanelCount() {
+        return Obs.find({ 'resource.code.coding.0.code': { $in: labGroups.lipidPanel.all } }).fetch().length
+    },
+
+    vitalsCount() {
+        return Obs.find({ 'resource.code.coding.0.code': { $in: labGroups.vitals.all } }).fetch().length
+    }
 
 })
 
@@ -362,23 +381,6 @@ Template.A1cTable.helpers({
     },
 
 })
-
-Template.heightWeightTable.helpers({
-
-    groupName() {
-        return 'Height_Weight'
-    },
-
-    dataArray() { // This works for now but need to figure out how to search all codes, not just the first one.
-        return Obs.find({ 'resource.code.coding.0.code': { $in: vitals.heightWeight } }).fetch()
-    },
-
-    dataLength() {
-        return Obs.find({ 'resource.code.coding.0.code': { $in: vitals.heightWeight } }).fetch().length
-    },
-
-})
-
 
 
 Template.otherTable.helpers({
