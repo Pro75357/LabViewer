@@ -13,7 +13,7 @@ Meteor.methods({
 					'GET',
 					patientEndpoint, {
 						params: {
-                            _count: 10, //Just get the first x patients (default I think is 100)
+                            _count: 50, //Just get the first x patients (default I think is 100)
                             _offset: 19 //Start at the 8th patient because that start on a good patient
 						},
 						headers: {

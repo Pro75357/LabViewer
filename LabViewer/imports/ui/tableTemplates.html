@@ -1,13 +1,47 @@
 <!-- Define the lab group templates here. Lots of re-usable code. -->
 <template name="labTables">
-    <div class="accordion-group">
-        {{> A1cTable}}
-        {{> glucoseTable}}
-        {{> creatanineTable}}
-        {{> heightWeightTable}}
+    <div class="panel panel-default accordion-group">
+        <div class="panel panel-heading">
+            <a data-toggle="collapse" href="#labGroup"><h4>Lab Groups</h4></a>
+        </div>
+        <div id="labGroup" class="panel-collapse collapse in">
+            <div class="panel panel-heading">
+                <a data-toggle="collapse" href="#hematologyGroup"><h5>Blood Counts</h5></a>
+            </div>
+            <div id="hematologyGroup" class="panel-collapse collapse">
+                <!-- hematology groups go here-->
+                
+                {{> glucoseTable}}
+                {{> creatinineTable}}
+            </div>
+            <div class="panel panel-heading">
+                <a data-toggle="collapse" href="#chemPanelGroup"><h5>Chem 7 Panel</h5></a>
+            </div>
+            <div id="chemPanelGroup" class="panel-collapse collapse">
+                <!-- ChemPanel Group goes here-->
+                {{> glucoseTable}}
+                {{> creatinineTable}}
+            </div>
+            <div class="panel panel-heading">
+                <a data-toggle="collapse" href="#otherChemGroup"><h5>Other Chemistry</h5></a>
+            </div>
+            <div id="otherChemGroup" class="panel-collapse collapse">
+                <!-- Other Chemistry Group goes here-->
+                {{> A1cTable}}
+            </div>
+        </div>
+        <div class="panel panel-heading">
+            <a data-toggle="collapse" href="#vitalsGroup"><h4>Vital Signs</h4></a>
+        </div>
+        <div id="vitalsGroup" class="panel-collapse collapse">
+            {{> heightWeightTable}}
+        </div>
+        {{> otherTable}}
     </div>
 </template>
 
+
+<!-- Hematology tables here -->
 <template name="A1cTable">
     {{#if dataArray}}
     <div class="panel-heading">
@@ -74,7 +108,7 @@
     {{/if}}
 </template>
 
-<template name="creatanineTable">
+<template name="creatinineTable">
     {{#if dataArray}}
     <div class="panel-heading">
         <h4 class="panel-title">
@@ -129,6 +163,42 @@
                     {{#each dataArray}}
                     <tr class="obsrow">
                         <td> {{resource.code.coding.[0].display}} </td>
+                        <td>  {{formatNumber resource.valueQuantity.value}} {{resource.valueQuantity.unit}}</td>
+                        <td> {{formatDate resource.effectiveDateTime}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {{/if}}
+</template>
+
+
+
+
+<template name="otherTable">
+    {{#if dataArray}}
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a data-toggle="collapse" href="#{{groupName}}"> {{groupName}}: {{dataLength}}</a>
+        </h4>
+    </div>
+    <div id="{{groupName}}" class="panel-collapse collapse">
+        <div class="panel-body">
+
+            <table class="table table-hover table-bordered table-condensed table-responsive">
+                <thead>
+                    <tr>
+                        <td>Name</td>
+                        <td>Value</td>
+                        <td>date/time</td>
+                    </tr>
+                </thead>
+                <tbody class="small">
+                    {{#each dataArray}}
+                    <tr class="obsrow">
+                        <td> ({{resource.code.coding.[0].code}}){{resource.code.coding.[0].display}} </td>
                         <td>  {{formatNumber resource.valueQuantity.value}} {{resource.valueQuantity.unit}}</td>
                         <td> {{formatDate resource.effectiveDateTime}}</td>
                     </tr>

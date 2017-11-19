@@ -2,6 +2,12 @@ import { Template } from 'meteor/templating';
 import { Obs } from '../api/Observations.js'
 import '../api/labgroups.js'
 
+Template.labTables.helpers({
+    // Here we will make helpers for the entire lab table- mostly group counts
+
+
+})
+
 Template.A1cTable.helpers({
 
     groupName() {
@@ -9,11 +15,11 @@ Template.A1cTable.helpers({
     },
 
     dataArray() { // This works for now but need to figure out how to search all codes, not just the first one.
-        return Obs.find({ 'resource.code.coding.0.code': { $in: labGroupA1c } }).fetch()
+        return Obs.find({ 'resource.code.coding.0.code': { $in: chemOther.a1c } }).fetch()
     },
 
     dataLength() {
-        return Obs.find({ 'resource.code.coding.0.code': { $in: labGroupA1c } }).fetch().length
+        return Obs.find({ 'resource.code.coding.0.code': { $in: chemOther.a1c } }).fetch().length
     },
 
 })
@@ -25,27 +31,27 @@ Template.glucoseTable.helpers({
     },
 
     dataArray() { // This works for now but need to figure out how to search all codes, not just the first one.
-        return Obs.find({ 'resource.code.coding.0.code': { $in: labGroupGlucose } }).fetch()
+        return Obs.find({ 'resource.code.coding.0.code': { $in: chemPanel.glucose } }).fetch()
     },
 
     dataLength() {
-        return Obs.find({ 'resource.code.coding.0.code': { $in: labGroupGlucose } }).fetch().length
+        return Obs.find({ 'resource.code.coding.0.code': { $in: chemPanel.glucose } }).fetch().length
     },
 
 })
 
-Template.creatanineTable.helpers({
+Template.creatinineTable.helpers({
 
     groupName() {
-        return 'Creatanine'
+        return 'Creatinine'
     },
 
     dataArray() { // This works for now but need to figure out how to search all codes, not just the first one.
-        return Obs.find({ 'resource.code.coding.0.code': { $in: labGroupCreatanine } }).fetch()
+        return Obs.find({ 'resource.code.coding.0.code': { $in: chemPanel.creatinine } }).fetch()
     },
 
     dataLength() {
-        return Obs.find({ 'resource.code.coding.0.code': { $in: labGroupCreatanine } }).fetch().length
+        return Obs.find({ 'resource.code.coding.0.code': { $in: chemPanel.creatinine } }).fetch().length
     },
 
 })
@@ -57,11 +63,29 @@ Template.heightWeightTable.helpers({
     },
 
     dataArray() { // This works for now but need to figure out how to search all codes, not just the first one.
-        return Obs.find({ 'resource.code.coding.0.code': { $in: vitalsGroupHeightWeight } }).fetch()
+        return Obs.find({ 'resource.code.coding.0.code': { $in: vitals.heightWeight } }).fetch()
     },
 
     dataLength() {
-        return Obs.find({ 'resource.code.coding.0.code': { $in: vitalsGroupHeightWeight } }).fetch().length
+        return Obs.find({ 'resource.code.coding.0.code': { $in: vitals.heightWeight } }).fetch().length
+    },
+
+})
+
+
+
+Template.otherTable.helpers({
+
+    groupName() {
+        return 'Other'
+    },
+
+    dataArray() { // This works for now but need to figure out how to search all codes, not just the first one.
+        return Obs.find({ 'resource.code.coding.0.code': { $nin: allCodes } }).fetch()
+    },
+
+    dataLength() {
+        return Obs.find({ 'resource.code.coding.0.code': { $nin: allCodes } }).fetch().length
     },
 
 })
