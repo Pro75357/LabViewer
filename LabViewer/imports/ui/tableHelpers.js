@@ -49,3 +49,19 @@ Template.creatanineTable.helpers({
     },
 
 })
+
+Template.heightWeightTable.helpers({
+
+    groupName() {
+        return 'Height_Weight'
+    },
+
+    dataArray() { // This works for now but need to figure out how to search all codes, not just the first one.
+        return Obs.find({ 'resource.code.coding.0.code': { $in: vitalsGroupHeightWeight } }).fetch()
+    },
+
+    dataLength() {
+        return Obs.find({ 'resource.code.coding.0.code': { $in: vitalsGroupHeightWeight } }).fetch().length
+    },
+
+})

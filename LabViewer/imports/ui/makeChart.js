@@ -51,16 +51,16 @@ updateChart = function (newLabel, newData) {
             datasets = []
 
             // Now lets make a default dataset object. Essentially a template object we can re-use. Pretty colors included. 
+            //http://www.chartjs.org/docs/latest/charts/line.html#dataset-properties
             datasetobject = {
                 label: "dataset Template",
-                fillColor: "Blue",
-                strokeColor: "green",
-                pointColor: "rgba(220,220,220,1)",
-                pointStrokeColor: "#fff",
-                pointHighlightFill: "#fff",
-                pointHighlightStroke: "rgba(220,220,220,1)",
+                backgroundColor: 'transparent',
+                borderColor: 'blue', 
+                pointBackgroundColor: '#fffc77',                
                 data: [0]  // Just someplaceholder data
             }
+
+
             // Almost there- we need to insert this object into our datasets array. The array method push lets us easily do that.
             datasets.push(datasetobject)
 
@@ -81,6 +81,7 @@ updateChart = function (newLabel, newData) {
                                 quarter: 'MMM YYYY'
                             }
                         }
+
                     }]
                 }
             }
@@ -106,15 +107,29 @@ updateChart = function (newLabel, newData) {
         // But, we're only concerned with the 'data' element within it for now
 
         // now, we can copy the datasetobject from above to use as a template
-        dataset = datasetobject
+        datasets = []
+    
+        newdatasetobject = datasetobject
 
         // push this dataset object and new labels into the myChart object and update everything.
 
-        dataset.label = newLabel
-        dataset.data = newData.values
+        newdatasetobject.data = newData.values
+        newdatasetobject.label = newLabel
+
+        datasets.push(newdatasetobject)
 
         myChart.data.labels = newData.labels
-        myChart.data.dataset = dataset
+        myChart.data.datasets = datasets
         myChart.update();
+   //     console.dir(datasets)
 
+}
+
+function getRandomColor() {
+    var letters = '0123456789ABCDEF'.split('');
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
     }
+    return color;
+}

@@ -1,15 +1,18 @@
 <!-- Define the lab group templates here. Lots of re-usable code. -->
 <template name="labTables">
-    {{> A1cTable}}
-    {{> glucoseTable}}
-    {{> creatanineTable}}
+    <div class="accordion-group">
+        {{> A1cTable}}
+        {{> glucoseTable}}
+        {{> creatanineTable}}
+        {{> heightWeightTable}}
+    </div>
 </template>
 
 <template name="A1cTable">
     {{#if dataArray}}
     <div class="panel-heading">
         <h4 class="panel-title">
-            <a data-toggle="collapse" href="#{{groupName}}"> {{groupName}}: {{dataLength}}</a>
+            <a data-toggle="collapse" href="#{{groupName}}"> {{groupName}} values found: {{dataLength}}</a>
         </h4>
     </div>
     <div id="{{groupName}}" class="panel-collapse collapse">
@@ -18,7 +21,7 @@
             <table class="table table-hover table-bordered table-condensed table-responsive">
                 <thead>
                     <tr>
-                        <td>Code</td>
+                        <td>Name</td>
                         <td>Value</td>
                         <td>date/time</td>
                     </tr>
@@ -26,7 +29,7 @@
                 <tbody class="small">
                     {{#each dataArray}}
                     <tr class="obsrow">
-                        <td> {{resource.code.coding.[0].code}} </td>
+                        <td> {{resource.code.coding.[0].display}} </td>
                         <td>  {{formatNumber resource.valueQuantity.value}} {{resource.valueQuantity.unit}}</td>
                         <td> {{formatDate resource.effectiveDateTime}}</td>
                     </tr>
@@ -51,7 +54,7 @@
             <table class="table table-hover table-bordered table-condensed table-responsive">
                 <thead>
                     <tr>
-                        <td>Code</td>
+                        <td>Name</td>
                         <td>Value</td>
                         <td>date/time</td>
                     </tr>
@@ -59,7 +62,7 @@
                 <tbody class="small">
                     {{#each dataArray}}
                     <tr class="obsrow">
-                        <td> {{resource.code.coding.[0].code}} </td>
+                        <td> {{resource.code.coding.[0].display}} </td>
                         <td>  {{formatNumber resource.valueQuantity.value}} {{resource.valueQuantity.unit}}</td>
                         <td> {{formatDate resource.effectiveDateTime}}</td>
                     </tr>
@@ -84,7 +87,7 @@
             <table class="table table-hover table-bordered table-condensed table-responsive">
                 <thead>
                     <tr>
-                        <td>Code</td>
+                        <td>Name</td>
                         <td>Value</td>
                         <td>date/time</td>
                     </tr>
@@ -92,7 +95,40 @@
                 <tbody class="small">
                     {{#each dataArray}}
                     <tr class="obsrow">
-                        <td> {{resource.code.coding.[0].code}} </td>
+                        <td> {{resource.code.coding.[0].display}} </td>
+                        <td>  {{formatNumber resource.valueQuantity.value}} {{resource.valueQuantity.unit}}</td>
+                        <td> {{formatDate resource.effectiveDateTime}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {{/if}}
+</template>
+
+<template name="heightWeightTable">
+    {{#if dataArray}}
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a data-toggle="collapse" href="#{{groupName}}"> {{groupName}}: {{dataLength}}</a>
+        </h4>
+    </div>
+    <div id="{{groupName}}" class="panel-collapse collapse">
+        <div class="panel-body">
+
+            <table class="table table-hover table-bordered table-condensed table-responsive">
+                <thead>
+                    <tr>
+                        <td>Name</td>
+                        <td>Value</td>
+                        <td>date/time</td>
+                    </tr>
+                </thead>
+                <tbody class="small">
+                    {{#each dataArray}}
+                    <tr class="obsrow">
+                        <td> {{resource.code.coding.[0].display}} </td>
                         <td>  {{formatNumber resource.valueQuantity.value}} {{resource.valueQuantity.unit}}</td>
                         <td> {{formatDate resource.effectiveDateTime}}</td>
                     </tr>

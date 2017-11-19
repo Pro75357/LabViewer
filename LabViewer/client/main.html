@@ -4,8 +4,7 @@
 
 <body>
     {{> header}}
-    {{> serverSelect}}
-    {{#if serverSelected}}
+
         {{> patientSelect}}
         <br />
         {{#if patientSelected}}
@@ -26,7 +25,6 @@
                 </div>
             </div>
         {{/if}}
-     {{/if}}
     {{> todo}}
 </body>
 
@@ -75,16 +73,22 @@
 <template name="patientSelect">
     <div class="container bg-info text-white">
         <div class="row vertical-align">
-            <div class="col-md-9">
-                <h5>Please select a patient</h5>
-                <form>
-                    <select name="list">
-                        {{#each patients}}
-                        <option value="{{@index}}">{{name}}</option>
-                        {{/each}}
-                    </select>
-                    <button type="submit">Go!</button>
-                </form>
+            <div class="col-md-3">
+                <p>Using default server: Synthetic Mass </p>
+                </div>
+                <div class="col-md-6">
+                    <h5>Pick a patient from the Server List</h5>
+                    <form>
+                        <select name="list">
+                            {{#each patients}}
+                            <option value="{{@index}}">{{name}}</option>
+                            {{/each}}
+                        </select>
+                        <button type="submit">Go!</button>
+                    </form>
+                </div>
+            <div>
+                
             </div>
             <div class="col-md-3 {{bgcolor}}">
                 {{selectedPatientName}}
@@ -102,7 +106,7 @@
 <template name="observationsSummary">
         Observations Found: {{total}}
         <br />
-    <div class="pre-scrollable border-0">
+    <div class="border-0">
         <div class="panel-group">
             <div class="panel-group panel-default">
                 {{> labTables}}
@@ -147,7 +151,7 @@
                 Auto-lab group/favorite buttons (CBC, BMP, weight + BMI, glucose + A1c, BUN/cr)
             </li>
             <li>
-                Filter/separate vitals from labs
+                DONE: Filter/separate vitals from labs
             </li>
             <li>
                 Include complex measurements (Blood Pressure)
@@ -156,10 +160,10 @@
                 Obs table highlights and re-arranges based on selection
             </li>
             <li>
-                Obs table groups
+                IN PROGRESS: Obs table groups
             </li>
             <li>
-                Better servers & quick-buttons straight to good demo patients 
+                IMPROVED: Better servers & quick-buttons straight to good demo patients 
             </li>
             <li>
                 Infobuttons

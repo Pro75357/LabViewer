@@ -17,6 +17,7 @@ import '../imports/ui/ObsSumm.js'
 // Many servers listed here: http://wiki.hl7.org/index.php?title=Publicly_Available_FHIR_Servers_for_testing
 // These seemed to work as of 11/10/2017
 //for copy paste: { url: '', name: '' },
+/* Hardcode server for now = Synthetic Mass
 var servers = [
     { url: 'https://syntheticmass.mitre.org/fhir', name: 'Synthetic Mass' },
     { url: 'http://spark.furore.com/fhir', name: 'Furore Spark' },
@@ -25,7 +26,7 @@ var servers = [
     //{ url: 'https://fhirtest.uhn.ca/baseDstu3', name: 'Hapi-FHIR' },
     //{ url: 'http://api.hackathon.siim.org/fhir/', name: 'SIIM Hackathon'}
     ]
-
+*/
 
 // Do the same for the patient list we will eventually create
 var patList = [
@@ -35,7 +36,9 @@ Session.set('patientList', patList)
 
 // Go ahead and create the blank selected patient and servers as well
 Session.set('selectedPatient', { name: 'No patient selected' })
-Session.set('selectedServer', { name: 'No Server selected' })
+
+//Session.set('selectedServer', { name: 'Synthetic Mass' })
+Session.set('selectedServer', { url: 'https://syntheticmass.mitre.org/fhir', name: 'Synthetic Mass' })
 
 
 // Create a blank Session variable for the observations
@@ -45,8 +48,10 @@ Session.set('observations', 'nothing found yet')
 // Create some page control session variables
 Session.set('graphReady', false)
 Session.set('chartRendered', false)
-Session.set('patListReady', false)
 Session.set('PatientReady', false)
+
+
+Session.set('patListReady', true)
 
 Template.body.helpers({
     serverSelected() {
@@ -82,13 +87,8 @@ Template.serverSelect.helpers({
     }
 });
 
-Template.serverSelect.events({
-    'change .serverList'(event, instance) {
-        serverIndex = event.target.value // get the server index number from the dropdown value
-            // For display purposes mostly
-        Session.set('selectedServer', servers[serverIndex]) //Set this 'selectedServer' session variable to that individual server object from the servers array
-
-            // Now call the getPatients method with this server's URL and get a list of patients for the next step...
+Template.header.rendered = function(){ //funcion that runs when the header loads
+    
         serverUrl = Session.get('selectedServer').url
         Meteor.call('getPatients', serverUrl, function (err, res) {
             if (err) {
@@ -96,11 +96,11 @@ Template.serverSelect.events({
             } else {
                 //console.log(res)
                 Session.set('patientList', res)
-                Session.set('patListReady', true)
+
             }
         })
     }
-})
+
 
 Template.patientSelect.helpers({
     bgcolor() {
@@ -157,6 +157,7 @@ Template.patientSelect.events({
                     console.log(e)
                 }
                 Session.set('dataReady', true)
+                //console.dir(Obs.find({}).fetch())
             }
         })
         Session.set('patListReady', true)

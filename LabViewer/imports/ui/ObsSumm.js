@@ -40,14 +40,14 @@ Template.observationsSummary.events({
         // need to call updateChart with newLabel = 'groupName' and newData = {Values:[],Labels[] }
 
         // we can build this object using the 'this' as well as Obs calls
-        console.log(this)
+       // console.log(this)
         newLabel = this.resource.code.coding[0].display
 
         //We will match the code with other ones in the Obs to get the data array. Would be nice to be able to match groups...
         newData = { values: [], labels: [] }
         numbers = Obs.find({ 'resource.code.coding.0.code': code }).fetch()
         for (x in numbers){
-            console.log(numbers[x].resource.valueQuantity.value)
+        //    console.log(numbers[x].resource.valueQuantity.value)
             newData.values.push(numbers[x].resource.valueQuantity.value)
             newData.labels.push(numbers[x].resource.effectiveDateTime)
         }
