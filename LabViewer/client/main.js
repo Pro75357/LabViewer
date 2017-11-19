@@ -3,8 +3,13 @@ import { Session } from 'meteor/session';
 import Chart from 'chart.js'
 
 import './main.html';
+import '../imports/ui/tableTemplates.html'
+import '../imports/ui/tableHelpers.js'
+
 import { Obs } from '../imports/api/Observations.js'
 import '../imports/ui/makeChart.js'
+
+import '../imports/ui/ObsSumm.js'
 
 //Define a servers object in the global space so it can be easily referred to (name and url)
     // This could be pulled from an external source easily enough, but would have to be done on the server-side
@@ -145,7 +150,7 @@ Template.patientSelect.events({
                 Obs.remove({}) // remove any old results
                 try {
                     for (x in res) {
-                        console.log(res[x])
+                        //console.log(res[x])
                         Obs.insert(res[x])
                     }
                 } catch (e) {
@@ -157,49 +162,6 @@ Template.patientSelect.events({
         Session.set('patListReady', true)
         Session.set('PatientReady', true)
     },
-})
-
-
-Template.observationsSummary.helpers({
-    total() {
-        //return Session.get('observations').length
-        if (Session.get('dataReady')) {
-            ///res = Obs.find({}).fetch()
-            return Obs.find({}).fetch().length
-        }
-        
-    },
-    obsVomit() { // for debugging, not used currently
-        //return JSON.stringify(Session.get('observations'), null, 2)
-        if (Session.get('dataReady')) {
-            res = Obs.find({}).fetch()
-            return JSON.stringify(res, null, 2)
-        }
-    },
-    entries() {
-        //return Session.get('observations')
-        //return Session.get('obsTable')
-        if (Session.get('dataReady')) {
-            return Obs.find({}, { sort: { dateTime: -1 } }).fetch()
-        }
-    },
-})
-
-
-
-Template.observationsSummary.events({
-    'click .obsrow': function (event, template) {
-        Session.set('graphReady', true)
-        code = this.code
-       // Meteor.call('getOneCode', this.endpoint, this.patId, this.code,)       
-        Session.set('code', code)
-        // Update the chart with this code
-
-        updateChart(code)
-        // Sort the table by code, this one on top
-            // todo 
-        //Session.set('obsTable', Obs.find({code: code}).fetch())
-    }
 })
 
 

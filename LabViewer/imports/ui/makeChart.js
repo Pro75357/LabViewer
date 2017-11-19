@@ -6,7 +6,7 @@ import Chart from 'chart.js'
 // the challenge will be to have the chart reactive, based on user-selected values. 
 
 // Here we need update the chart object based on the passed lab code
-updateChart = function (code) {
+updateChart = function (newLabel, newData) {
 
 
         if (!Session.get('chartRendered')) {
@@ -53,7 +53,7 @@ updateChart = function (code) {
             // Now lets make a default dataset object. Essentially a template object we can re-use. Pretty colors included. 
             datasetobject = {
                 label: "dataset Template",
-                fillColor: "rgba(220,220,220,0.2)",
+                fillColor: "Blue",
                 strokeColor: "green",
                 pointColor: "rgba(220,220,220,1)",
                 pointStrokeColor: "#fff",
@@ -108,42 +108,13 @@ updateChart = function (code) {
         // now, we can copy the datasetobject from above to use as a template
         dataset = datasetobject
 
-        // We can now replace elements of the dataset object as we please. 
-        dataset.fillColor= "blue", // blue fill
+        // push this dataset object and new labels into the myChart object and update everything.
 
+        dataset.label = newLabel
+        dataset.data = newData.values
 
-        // so we need to replace the label and data fields
-
-        // label -> can just find one of the codes and use the codeName
-            dataset.label = Obs.findOne({ code: code }).codeName
-
-
-        // first collect the data we need. Labels and values. Both come from the Obs collection, findable using the passed code
-        obs = Obs.find({ code: code }).fetch()
-
-        // the data values needs to be an array of all the values in the set. Need to loop through obs and get these.
-        values = [] // first, create an empty array
-        for (x in obs) {
-            // console.log(obs[x].value)
-            values.push(obs[x].value) // push each value to our values array. 
-        }
-
-        // just copy the values directly
-        dataset.data = values
-
-        // Now, pretty much do the same thing for the dateTime fields to create the top-level labels
-            // Since these are dates we will need to deal with dates. 
-            // For now I will cheat and just count the number of results...
-        labels = []
-        for (x in obs) {
-           // console.log(obs[x].dateTime)
-            labels.push(obs[x].dateTime)
-            //labels.push(x)
-        }
-
-        // finally, push this dataset object and new labels into the myChart object and update everything.
+        myChart.data.labels = newData.labels
         myChart.data.dataset = dataset
-        myChart.data.labels = labels
         myChart.update();
 
     }
