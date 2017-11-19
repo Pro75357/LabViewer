@@ -13,7 +13,8 @@ Meteor.methods({
 					'GET',
 					patientEndpoint, {
 						params: {
-							_count: 40, //Just get the first x patients (default I think is 100)
+                            _count: 10, //Just get the first x patients (default I think is 100)
+                            _offset: 19 //Start at the 8th patient because that start on a good patient
 						},
 						headers: {
 							Accept: 'application/json, application/json+fhir'
@@ -103,6 +104,7 @@ Meteor.methods({
 							patient: patId,
 							//category: 'laboratory' // hard-code this to just return laboratory data
 							//category: 'vital-signs' //
+                            _count: 1000 // we try
 						},
 						headers: {
 							Accept: 'application/json, application/json+fhir'
@@ -124,27 +126,41 @@ Meteor.methods({
 				return results
 			}
 
+            // Max results are 100 per search- we want them all, so figure out if there are next pages. If so, do the call and add the results to the pile. 
+           // console.log(res.data.link)
+
+            while (res.data.link)
+
+
 			//return { results: res.data.entry.length, entries: res.data.entry } 
             // The fhir-formatted data is ugly and hard to parse through on client-side helpers.
             // For simplicity, we will go ahead and parse out the data we want for this particular patient, and pass the simpler, cleaner object to the client.
             // This is similar to how we handle the patient search above
+            //console.dir(res.data)
+            return res.data.entry
+
+            /*
 
             for (x in res.data.entry){
                 pre = res.data.entry[x].resource
                 //Use a try/catch so we don't just crash
+                console.log(pre)
                 try {
                     if(pre.valueQuantity.value){ // if there is an individual value, we will use that
                         results.push({
                             codeName: pre.code.coding[0].display,
                             code: pre.code.coding[0].code,
                             value: pre.valueQuantity.value, // need to trim this to 2 decimal places, otherwise looks crappy.
+                            unit: pre.valueQuantity.unit,
                             dateTime: new Date(pre.effectiveDateTime),
+
                            // endpoint: endpoint,
                            // patId: patId
                         })
                     } else {
                         // if there is not an individual value (like a BP) we need to do more logic...
                         // for now just do nothing
+                        null
                     }
                 } catch (e) {
                     console.log(e)
@@ -154,6 +170,8 @@ Meteor.methods({
 
             }
             return results
+
+            */
 		} catch (e) {
 			console.log(e)
 			// handle 401 (not authroized) here

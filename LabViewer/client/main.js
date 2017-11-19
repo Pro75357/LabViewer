@@ -3,8 +3,13 @@ import { Session } from 'meteor/session';
 import Chart from 'chart.js'
 
 import './main.html';
+import '../imports/ui/tableTemplates.html'
+import '../imports/ui/tableHelpers.js'
+
 import { Obs } from '../imports/api/Observations.js'
 import '../imports/ui/makeChart.js'
+
+import '../imports/ui/ObsSumm.js'
 
 //Define a servers object in the global space so it can be easily referred to (name and url)
     // This could be pulled from an external source easily enough, but would have to be done on the server-side
@@ -12,6 +17,7 @@ import '../imports/ui/makeChart.js'
 // Many servers listed here: http://wiki.hl7.org/index.php?title=Publicly_Available_FHIR_Servers_for_testing
 // These seemed to work as of 11/10/2017
 //for copy paste: { url: '', name: '' },
+/* Hardcode server for now = Synthetic Mass
 var servers = [
     { url: 'https://syntheticmass.mitre.org/fhir', name: 'Synthetic Mass' },
     { url: 'http://spark.furore.com/fhir', name: 'Furore Spark' },
@@ -20,7 +26,7 @@ var servers = [
     //{ url: 'https://fhirtest.uhn.ca/baseDstu3', name: 'Hapi-FHIR' },
     //{ url: 'http://api.hackathon.siim.org/fhir/', name: 'SIIM Hackathon'}
     ]
-
+*/
 
 // Do the same for the patient list we will eventually create
 var patList = [
@@ -30,7 +36,9 @@ Session.set('patientList', patList)
 
 // Go ahead and create the blank selected patient and servers as well
 Session.set('selectedPatient', { name: 'No patient selected' })
-Session.set('selectedServer', { name: 'No Server selected' })
+
+//Session.set('selectedServer', { name: 'Synthetic Mass' })
+Session.set('selectedServer', { url: 'https://syntheticmass.mitre.org/fhir', name: 'Synthetic Mass' })
 
 
 // Create a blank Session variable for the observations
@@ -40,8 +48,10 @@ Session.set('observations', 'nothing found yet')
 // Create some page control session variables
 Session.set('graphReady', false)
 Session.set('chartRendered', false)
-Session.set('patListReady', false)
 Session.set('PatientReady', false)
+
+
+Session.set('patListReady', true)
 
 Template.body.helpers({
     serverSelected() {
@@ -77,13 +87,8 @@ Template.serverSelect.helpers({
     }
 });
 
-Template.serverSelect.events({
-    'change .serverList'(event, instance) {
-        serverIndex = event.target.value // get the server index number from the dropdown value
-            // For display purposes mostly
-        Session.set('selectedServer', servers[serverIndex]) //Set this 'selectedServer' session variable to that individual server object from the servers array
-
-            // Now call the getPatients method with this server's URL and get a list of patients for the next step...
+Template.header.rendered = function(){ //funcion that runs when the header loads
+    
         serverUrl = Session.get('selectedServer').url
         Meteor.call('getPatients', serverUrl, function (err, res) {
             if (err) {
@@ -91,11 +96,11 @@ Template.serverSelect.events({
             } else {
                 //console.log(res)
                 Session.set('patientList', res)
-                Session.set('patListReady', true)
+
             }
         })
     }
-})
+
 
 Template.patientSelect.helpers({
     bgcolor() {
@@ -145,61 +150,19 @@ Template.patientSelect.events({
                 Obs.remove({}) // remove any old results
                 try {
                     for (x in res) {
-                        console.log(res[x])
+                        //console.log(res[x])
                         Obs.insert(res[x])
                     }
                 } catch (e) {
                     console.log(e)
                 }
                 Session.set('dataReady', true)
+                //console.dir(Obs.find({}).fetch())
             }
         })
         Session.set('patListReady', true)
         Session.set('PatientReady', true)
     },
-})
-
-
-Template.observationsSummary.helpers({
-    total() {
-        //return Session.get('observations').length
-        if (Session.get('dataReady')) {
-            ///res = Obs.find({}).fetch()
-            return Obs.find({}).fetch().length
-        }
-        
-    },
-    obsVomit() { // for debugging, not used currently
-        //return JSON.stringify(Session.get('observations'), null, 2)
-        if (Session.get('dataReady')) {
-            res = Obs.find({}).fetch()
-            return JSON.stringify(res, null, 2)
-        }
-    },
-    entries() {
-        //return Session.get('observations')
-        //return Session.get('obsTable')
-        if (Session.get('dataReady')) {
-            return Obs.find({}, { sort: { dateTime: -1 } }).fetch()
-        }
-    },
-})
-
-
-
-Template.observationsSummary.events({
-    'click .obsrow': function (event, template) {
-        Session.set('graphReady', true)
-        code = this.code
-       // Meteor.call('getOneCode', this.endpoint, this.patId, this.code,)       
-        Session.set('code', code)
-        // Update the chart with this code
-
-        updateChart(code)
-        // Sort the table by code, this one on top
-            // todo 
-        //Session.set('obsTable', Obs.find({code: code}).fetch())
-    }
 })
 
 
