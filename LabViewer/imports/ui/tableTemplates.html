@@ -1,26 +1,48 @@
 <!-- Define the lab group templates here. Lots of re-usable code. -->
 <template name="labTables">
-    <div class="panel panel-default accordion-group">
+    <div class="panel panel-warning accordion-group">
         <div class="panel panel-heading">
             <a data-toggle="collapse" href="#labGroup"><h4>Lab Groups</h4></a>
         </div>
         <div id="labGroup" class="panel-collapse collapse in">
             <div class="panel panel-heading">
-                <a data-toggle="collapse" href="#hematologyGroup"><h5>Blood Counts</h5></a>
+                <a data-toggle="collapse" href="#hematologyGroup"><h5>Hematology</h5></a>
             </div>
-            <div id="hematologyGroup" class="panel-collapse collapse">
+            <div id="hematologyGroup" class="panel-collapse collapse in">
                 <!-- hematology groups go here-->
-                
-                {{> glucoseTable}}
-                {{> creatinineTable}}
+                {{> redBloodTable}}
+                {{> whiteBloodTable}}
+                {{> plateletsTable}}
+                {{> hemoglobinTable}}
+                {{> hematocritTable}}
             </div>
             <div class="panel panel-heading">
-                <a data-toggle="collapse" href="#chemPanelGroup"><h5>Chem 7 Panel</h5></a>
+                <a data-toggle="collapse" href="#chemPanelGroup"><h5>Chemistry Panel</h5></a>
             </div>
             <div id="chemPanelGroup" class="panel-collapse collapse">
                 <!-- ChemPanel Group goes here-->
-                {{> glucoseTable}}
+                {{> sodiumTable}}
+                {{> potassiumTable}}
+                {{> chlorideTable}}
+                {{> bicarbTable}}
+                {{> ureaTable}}
                 {{> creatinineTable}}
+                {{> eGFRTable}}
+                {{> glucoseTable}}
+                {{> calciumTable}}
+                {{> magTable}}
+                {{> phosTable}}
+            </div>
+            <div class="panel panel-heading">
+                <a data-toggle="collapse" href="#lipidsGroup"><h5>Lipid Panel</h5></a>
+            </div>
+            <div id="lipidsGroup" class="panel-collapse collapse">
+                <!-- Lipid Group goes here-->
+                {{> tCholTable}}
+                {{> trigTable}}
+                {{> LDLTable}}
+                {{> HDLTable}}
+            </div>
             </div>
             <div class="panel panel-heading">
                 <a data-toggle="collapse" href="#otherChemGroup"><h5>Other Chemistry</h5></a>
@@ -29,7 +51,7 @@
                 <!-- Other Chemistry Group goes here-->
                 {{> A1cTable}}
             </div>
-        </div>
+        
         <div class="panel panel-heading">
             <a data-toggle="collapse" href="#vitalsGroup"><h4>Vital Signs</h4></a>
         </div>
@@ -42,11 +64,667 @@
 
 
 <!-- Hematology tables here -->
+
+<template name="redBloodTable">
+    {{#if dataArray}}
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a data-toggle="collapse" href="#{{groupName}}"> - {{groupName}} (found {{dataLength}})</a>
+        </h4>
+    </div>
+    <div id="{{groupName}}" class="panel-collapse collapse">
+        <div class="panel-body">
+
+            <table class="table table-hover table-bordered table-condensed table-responsive">
+                <thead>
+                    <tr>
+                        <td>Name</td>
+                        <td>Value</td>
+                        <td>date/time</td>
+                    </tr>
+                </thead>
+                <tbody class="small">
+                    {{#each dataArray}}
+                    <tr class="obsrow">
+                        <td> {{resource.code.coding.[0].display}} </td>
+                        <td>  {{formatNumber resource.valueQuantity.value}} {{resource.valueQuantity.unit}}</td>
+                        <td> {{formatDate resource.effectiveDateTime}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {{/if}}
+</template>
+
+<template name="whiteBloodTable">
+    {{#if dataArray}}
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a data-toggle="collapse" href="#{{groupName}}"> {{groupName}} (found {{dataLength}})</a>
+        </h4>
+    </div>
+    <div id="{{groupName}}" class="panel-collapse collapse">
+        <div class="panel-body">
+
+            <table class="table table-hover table-bordered table-condensed table-responsive">
+                <thead>
+                    <tr>
+                        <td>Name</td>
+                        <td>Value</td>
+                        <td>date/time</td>
+                    </tr>
+                </thead>
+                <tbody class="small">
+                    {{#each dataArray}}
+                    <tr class="obsrow">
+                        <td> {{resource.code.coding.[0].display}} </td>
+                        <td>  {{formatNumber resource.valueQuantity.value}} {{resource.valueQuantity.unit}}</td>
+                        <td> {{formatDate resource.effectiveDateTime}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {{/if}}
+</template>
+
+<template name="plateletsTable">
+    {{#if dataArray}}
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a data-toggle="collapse" href="#{{groupName}}"> {{groupName}} (found {{dataLength}})</a>
+        </h4>
+    </div>
+    <div id="{{groupName}}" class="panel-collapse collapse">
+        <div class="panel-body">
+
+            <table class="table table-hover table-bordered table-condensed table-responsive">
+                <thead>
+                    <tr>
+                        <td>Name</td>
+                        <td>Value</td>
+                        <td>date/time</td>
+                    </tr>
+                </thead>
+                <tbody class="small">
+                    {{#each dataArray}}
+                    <tr class="obsrow">
+                        <td> {{resource.code.coding.[0].display}} </td>
+                        <td>  {{formatNumber resource.valueQuantity.value}} {{resource.valueQuantity.unit}}</td>
+                        <td> {{formatDate resource.effectiveDateTime}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {{/if}}
+</template>
+
+<template name="hemoglobinTable">
+    {{#if dataArray}}
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a data-toggle="collapse" href="#{{groupName}}"> {{groupName}} (found {{dataLength}})</a>
+        </h4>
+    </div>
+    <div id="{{groupName}}" class="panel-collapse collapse">
+        <div class="panel-body">
+
+            <table class="table table-hover table-bordered table-condensed table-responsive">
+                <thead>
+                    <tr>
+                        <td>Name</td>
+                        <td>Value</td>
+                        <td>date/time</td>
+                    </tr>
+                </thead>
+                <tbody class="small">
+                    {{#each dataArray}}
+                    <tr class="obsrow">
+                        <td> {{resource.code.coding.[0].display}} </td>
+                        <td>  {{formatNumber resource.valueQuantity.value}} {{resource.valueQuantity.unit}}</td>
+                        <td> {{formatDate resource.effectiveDateTime}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {{/if}}
+</template>
+
+<template name="hematocritTable">
+    {{#if dataArray}}
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a data-toggle="collapse" href="#{{groupName}}"> {{groupName}} (found {{dataLength}})</a>
+        </h4>
+    </div>
+    <div id="{{groupName}}" class="panel-collapse collapse">
+        <div class="panel-body">
+
+            <table class="table table-hover table-bordered table-condensed table-responsive">
+                <thead>
+                    <tr>
+                        <td>Name</td>
+                        <td>Value</td>
+                        <td>date/time</td>
+                    </tr>
+                </thead>
+                <tbody class="small">
+                    {{#each dataArray}}
+                    <tr class="obsrow">
+                        <td> {{resource.code.coding.[0].display}} </td>
+                        <td>  {{formatNumber resource.valueQuantity.value}} {{resource.valueQuantity.unit}}</td>
+                        <td> {{formatDate resource.effectiveDateTime}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {{/if}}
+</template>
+
+
+<!-- Chemistry tables go here-->
+
+<!-- Chem panel -->
+
+<template name="sodiumTable">
+    {{#if dataArray}}
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a data-toggle="collapse" href="#{{groupName}}"> {{groupName}} (found {{dataLength}})</a>
+        </h4>
+    </div>
+    <div id="{{groupName}}" class="panel-collapse collapse">
+        <div class="panel-body">
+
+            <table class="table table-hover table-bordered table-condensed table-responsive">
+                <thead>
+                    <tr>
+                        <td>Name</td>
+                        <td>Value</td>
+                        <td>date/time</td>
+                    </tr>
+                </thead>
+                <tbody class="small">
+                    {{#each dataArray}}
+                    <tr class="obsrow">
+                        <td> {{resource.code.coding.[0].display}} </td>
+                        <td>  {{formatNumber resource.valueQuantity.value}} {{resource.valueQuantity.unit}}</td>
+                        <td> {{formatDate resource.effectiveDateTime}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {{/if}}
+</template>
+<template name="potassiumTable">
+    {{#if dataArray}}
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a data-toggle="collapse" href="#{{groupName}}"> {{groupName}} (found {{dataLength}})</a>
+        </h4>
+    </div>
+    <div id="{{groupName}}" class="panel-collapse collapse">
+        <div class="panel-body">
+
+            <table class="table table-hover table-bordered table-condensed table-responsive">
+                <thead>
+                    <tr>
+                        <td>Name</td>
+                        <td>Value</td>
+                        <td>date/time</td>
+                    </tr>
+                </thead>
+                <tbody class="small">
+                    {{#each dataArray}}
+                    <tr class="obsrow">
+                        <td> {{resource.code.coding.[0].display}} </td>
+                        <td>  {{formatNumber resource.valueQuantity.value}} {{resource.valueQuantity.unit}}</td>
+                        <td> {{formatDate resource.effectiveDateTime}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {{/if}}
+</template>
+<template name="chlorideTable">
+    {{#if dataArray}}
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a data-toggle="collapse" href="#{{groupName}}"> {{groupName}} (found {{dataLength}})</a>
+        </h4>
+    </div>
+    <div id="{{groupName}}" class="panel-collapse collapse">
+        <div class="panel-body">
+
+            <table class="table table-hover table-bordered table-condensed table-responsive">
+                <thead>
+                    <tr>
+                        <td>Name</td>
+                        <td>Value</td>
+                        <td>date/time</td>
+                    </tr>
+                </thead>
+                <tbody class="small">
+                    {{#each dataArray}}
+                    <tr class="obsrow">
+                        <td> {{resource.code.coding.[0].display}} </td>
+                        <td>  {{formatNumber resource.valueQuantity.value}} {{resource.valueQuantity.unit}}</td>
+                        <td> {{formatDate resource.effectiveDateTime}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {{/if}}
+</template>
+<template name="bicarbTable">
+    {{#if dataArray}}
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a data-toggle="collapse" href="#{{groupName}}"> {{groupName}} (found {{dataLength}})</a>
+        </h4>
+    </div>
+    <div id="{{groupName}}" class="panel-collapse collapse">
+        <div class="panel-body">
+
+            <table class="table table-hover table-bordered table-condensed table-responsive">
+                <thead>
+                    <tr>
+                        <td>Name</td>
+                        <td>Value</td>
+                        <td>date/time</td>
+                    </tr>
+                </thead>
+                <tbody class="small">
+                    {{#each dataArray}}
+                    <tr class="obsrow">
+                        <td> {{resource.code.coding.[0].display}} </td>
+                        <td>  {{formatNumber resource.valueQuantity.value}} {{resource.valueQuantity.unit}}</td>
+                        <td> {{formatDate resource.effectiveDateTime}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {{/if}}
+</template>
+<template name="ureaTable">
+    {{#if dataArray}}
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a data-toggle="collapse" href="#{{groupName}}"> {{groupName}} (found {{dataLength}})</a>
+        </h4>
+    </div>
+    <div id="{{groupName}}" class="panel-collapse collapse">
+        <div class="panel-body">
+
+            <table class="table table-hover table-bordered table-condensed table-responsive">
+                <thead>
+                    <tr>
+                        <td>Name</td>
+                        <td>Value</td>
+                        <td>date/time</td>
+                    </tr>
+                </thead>
+                <tbody class="small">
+                    {{#each dataArray}}
+                    <tr class="obsrow">
+                        <td> {{resource.code.coding.[0].display}} </td>
+                        <td>  {{formatNumber resource.valueQuantity.value}} {{resource.valueQuantity.unit}}</td>
+                        <td> {{formatDate resource.effectiveDateTime}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {{/if}}
+</template>
+<template name="creatinineTable">
+    {{#if dataArray}}
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a data-toggle="collapse" href="#{{groupName}}"> {{groupName}} (found {{dataLength}})</a>
+        </h4>
+    </div>
+    <div id="{{groupName}}" class="panel-collapse collapse">
+        <div class="panel-body">
+
+            <table class="table table-hover table-bordered table-condensed table-responsive">
+                <thead>
+                    <tr>
+                        <td>Name</td>
+                        <td>Value</td>
+                        <td>date/time</td>
+                    </tr>
+                </thead>
+                <tbody class="small">
+                    {{#each dataArray}}
+                    <tr class="obsrow">
+                        <td> {{resource.code.coding.[0].display}} </td>
+                        <td>  {{formatNumber resource.valueQuantity.value}} {{resource.valueQuantity.unit}}</td>
+                        <td> {{formatDate resource.effectiveDateTime}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {{/if}}
+</template>
+<template name="eGFRTable">
+    {{#if dataArray}}
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a data-toggle="collapse" href="#{{groupName}}"> {{groupName}} (found {{dataLength}})</a>
+        </h4>
+    </div>
+    <div id="{{groupName}}" class="panel-collapse collapse">
+        <div class="panel-body">
+
+            <table class="table table-hover table-bordered table-condensed table-responsive">
+                <thead>
+                    <tr>
+                        <td>Name</td>
+                        <td>Value</td>
+                        <td>date/time</td>
+                    </tr>
+                </thead>
+                <tbody class="small">
+                    {{#each dataArray}}
+                    <tr class="obsrow">
+                        <td> {{resource.code.coding.[0].display}} </td>
+                        <td>  {{formatNumber resource.valueQuantity.value}} {{resource.valueQuantity.unit}}</td>
+                        <td> {{formatDate resource.effectiveDateTime}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {{/if}}
+</template>
+<template name="glucoseTable">
+    {{#if dataArray}}
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a data-toggle="collapse" href="#{{groupName}}"> {{groupName}} (found {{dataLength}})</a>
+        </h4>
+    </div>
+    <div id="{{groupName}}" class="panel-collapse collapse">
+        <div class="panel-body">
+
+            <table class="table table-hover table-bordered table-condensed table-responsive">
+                <thead>
+                    <tr>
+                        <td>Name</td>
+                        <td>Value</td>
+                        <td>date/time</td>
+                    </tr>
+                </thead>
+                <tbody class="small">
+                    {{#each dataArray}}
+                    <tr class="obsrow">
+                        <td> {{resource.code.coding.[0].display}} </td>
+                        <td>  {{formatNumber resource.valueQuantity.value}} {{resource.valueQuantity.unit}}</td>
+                        <td> {{formatDate resource.effectiveDateTime}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {{/if}}
+</template>
+<template name="calciumTable">
+    {{#if dataArray}}
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a data-toggle="collapse" href="#{{groupName}}"> {{groupName}} (found {{dataLength}})</a>
+        </h4>
+    </div>
+    <div id="{{groupName}}" class="panel-collapse collapse">
+        <div class="panel-body">
+
+            <table class="table table-hover table-bordered table-condensed table-responsive">
+                <thead>
+                    <tr>
+                        <td>Name</td>
+                        <td>Value</td>
+                        <td>date/time</td>
+                    </tr>
+                </thead>
+                <tbody class="small">
+                    {{#each dataArray}}
+                    <tr class="obsrow">
+                        <td> {{resource.code.coding.[0].display}} </td>
+                        <td>  {{formatNumber resource.valueQuantity.value}} {{resource.valueQuantity.unit}}</td>
+                        <td> {{formatDate resource.effectiveDateTime}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {{/if}}
+</template>
+<template name="magTable">
+    {{#if dataArray}}
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a data-toggle="collapse" href="#{{groupName}}"> {{groupName}} (found {{dataLength}})</a>
+        </h4>
+    </div>
+    <div id="{{groupName}}" class="panel-collapse collapse">
+        <div class="panel-body">
+
+            <table class="table table-hover table-bordered table-condensed table-responsive">
+                <thead>
+                    <tr>
+                        <td>Name</td>
+                        <td>Value</td>
+                        <td>date/time</td>
+                    </tr>
+                </thead>
+                <tbody class="small">
+                    {{#each dataArray}}
+                    <tr class="obsrow">
+                        <td> {{resource.code.coding.[0].display}} </td>
+                        <td>  {{formatNumber resource.valueQuantity.value}} {{resource.valueQuantity.unit}}</td>
+                        <td> {{formatDate resource.effectiveDateTime}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {{/if}}
+</template>
+<template name="phosTable">
+    {{#if dataArray}}
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a data-toggle="collapse" href="#{{groupName}}"> {{groupName}} (found {{dataLength}})</a>
+        </h4>
+    </div>
+    <div id="{{groupName}}" class="panel-collapse collapse">
+        <div class="panel-body">
+
+            <table class="table table-hover table-bordered table-condensed table-responsive">
+                <thead>
+                    <tr>
+                        <td>Name</td>
+                        <td>Value</td>
+                        <td>date/time</td>
+                    </tr>
+                </thead>
+                <tbody class="small">
+                    {{#each dataArray}}
+                    <tr class="obsrow">
+                        <td> {{resource.code.coding.[0].display}} </td>
+                        <td>  {{formatNumber resource.valueQuantity.value}} {{resource.valueQuantity.unit}}</td>
+                        <td> {{formatDate resource.effectiveDateTime}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {{/if}}
+</template>
+
+<!-- Lipid panel here -->
+<template name="tCholTable">
+    {{#if dataArray}}
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a data-toggle="collapse" href="#{{groupName}}"> {{groupName}} (found {{dataLength}})</a>
+        </h4>
+    </div>
+    <div id="{{groupName}}" class="panel-collapse collapse">
+        <div class="panel-body">
+
+            <table class="table table-hover table-bordered table-condensed table-responsive">
+                <thead>
+                    <tr>
+                        <td>Name</td>
+                        <td>Value</td>
+                        <td>date/time</td>
+                    </tr>
+                </thead>
+                <tbody class="small">
+                    {{#each dataArray}}
+                    <tr class="obsrow">
+                        <td> {{resource.code.coding.[0].display}} </td>
+                        <td>  {{formatNumber resource.valueQuantity.value}} {{resource.valueQuantity.unit}}</td>
+                        <td> {{formatDate resource.effectiveDateTime}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {{/if}}
+</template>
+<template name="trigTable">
+    {{#if dataArray}}
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a data-toggle="collapse" href="#{{groupName}}"> {{groupName}} (found {{dataLength}})</a>
+        </h4>
+    </div>
+    <div id="{{groupName}}" class="panel-collapse collapse">
+        <div class="panel-body">
+
+            <table class="table table-hover table-bordered table-condensed table-responsive">
+                <thead>
+                    <tr>
+                        <td>Name</td>
+                        <td>Value</td>
+                        <td>date/time</td>
+                    </tr>
+                </thead>
+                <tbody class="small">
+                    {{#each dataArray}}
+                    <tr class="obsrow">
+                        <td> {{resource.code.coding.[0].display}} </td>
+                        <td>  {{formatNumber resource.valueQuantity.value}} {{resource.valueQuantity.unit}}</td>
+                        <td> {{formatDate resource.effectiveDateTime}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {{/if}}
+</template>
+<template name="LDLTable">
+    {{#if dataArray}}
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a data-toggle="collapse" href="#{{groupName}}"> {{groupName}} (found {{dataLength}})</a>
+        </h4>
+    </div>
+    <div id="{{groupName}}" class="panel-collapse collapse">
+        <div class="panel-body">
+
+            <table class="table table-hover table-bordered table-condensed table-responsive">
+                <thead>
+                    <tr>
+                        <td>Name</td>
+                        <td>Value</td>
+                        <td>date/time</td>
+                    </tr>
+                </thead>
+                <tbody class="small">
+                    {{#each dataArray}}
+                    <tr class="obsrow">
+                        <td> {{resource.code.coding.[0].display}} </td>
+                        <td>  {{formatNumber resource.valueQuantity.value}} {{resource.valueQuantity.unit}}</td>
+                        <td> {{formatDate resource.effectiveDateTime}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {{/if}}
+</template>
+<template name="HDLTable">
+    {{#if dataArray}}
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a data-toggle="collapse" href="#{{groupName}}"> {{groupName}} (found {{dataLength}})</a>
+        </h4>
+    </div>
+    <div id="{{groupName}}" class="panel-collapse collapse">
+        <div class="panel-body">
+
+            <table class="table table-hover table-bordered table-condensed table-responsive">
+                <thead>
+                    <tr>
+                        <td>Name</td>
+                        <td>Value</td>
+                        <td>date/time</td>
+                    </tr>
+                </thead>
+                <tbody class="small">
+                    {{#each dataArray}}
+                    <tr class="obsrow">
+                        <td> {{resource.code.coding.[0].display}} </td>
+                        <td>  {{formatNumber resource.valueQuantity.value}} {{resource.valueQuantity.unit}}</td>
+                        <td> {{formatDate resource.effectiveDateTime}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {{/if}}
+</template>
+
+<!-- Other chem here -->
+
 <template name="A1cTable">
     {{#if dataArray}}
     <div class="panel-heading">
         <h4 class="panel-title">
-            <a data-toggle="collapse" href="#{{groupName}}"> {{groupName}} values found: {{dataLength}}</a>
+            <a data-toggle="collapse" href="#{{groupName}}"> {{groupName}} (found {{dataLength}})</a>
         </h4>
     </div>
     <div id="{{groupName}}" class="panel-collapse collapse">
@@ -75,71 +753,8 @@
     {{/if}}
 </template>
 
-<template name="glucoseTable">
-    {{#if dataArray}}
-    <div class="panel-heading">
-        <h4 class="panel-title">
-            <a data-toggle="collapse" href="#{{groupName}}"> {{groupName}} values found: {{dataLength}}</a>
-        </h4>
-    </div>
-    <div id="{{groupName}}" class="panel-collapse collapse">
-        <div class="panel-body">
 
-            <table class="table table-hover table-bordered table-condensed table-responsive">
-                <thead>
-                    <tr>
-                        <td>Name</td>
-                        <td>Value</td>
-                        <td>date/time</td>
-                    </tr>
-                </thead>
-                <tbody class="small">
-                    {{#each dataArray}}
-                    <tr class="obsrow">
-                        <td> {{resource.code.coding.[0].display}} </td>
-                        <td>  {{formatNumber resource.valueQuantity.value}} {{resource.valueQuantity.unit}}</td>
-                        <td> {{formatDate resource.effectiveDateTime}}</td>
-                    </tr>
-                    {{/each}}
-                </tbody>
-            </table>
-        </div>
-    </div>
-    {{/if}}
-</template>
-
-<template name="creatinineTable">
-    {{#if dataArray}}
-    <div class="panel-heading">
-        <h4 class="panel-title">
-            <a data-toggle="collapse" href="#{{groupName}}"> {{groupName}}: {{dataLength}}</a>
-        </h4>
-    </div>
-    <div id="{{groupName}}" class="panel-collapse collapse">
-        <div class="panel-body">
-
-            <table class="table table-hover table-bordered table-condensed table-responsive">
-                <thead>
-                    <tr>
-                        <td>Name</td>
-                        <td>Value</td>
-                        <td>date/time</td>
-                    </tr>
-                </thead>
-                <tbody class="small">
-                    {{#each dataArray}}
-                    <tr class="obsrow">
-                        <td> {{resource.code.coding.[0].display}} </td>
-                        <td>  {{formatNumber resource.valueQuantity.value}} {{resource.valueQuantity.unit}}</td>
-                        <td> {{formatDate resource.effectiveDateTime}}</td>
-                    </tr>
-                    {{/each}}
-                </tbody>
-            </table>
-        </div>
-    </div>
-    {{/if}}
-</template>
+<!-- VItals stuff here -->
 
 <template name="heightWeightTable">
     {{#if dataArray}}
@@ -175,13 +790,13 @@
 </template>
 
 
-
+<!-- The "Other" table -->
 
 <template name="otherTable">
     {{#if dataArray}}
     <div class="panel-heading">
         <h4 class="panel-title">
-            <a data-toggle="collapse" href="#{{groupName}}"> {{groupName}}: {{dataLength}}</a>
+            <a data-toggle="collapse" href="#{{groupName}}"> - Ungrouped Observations: {{dataLength}}</a>
         </h4>
     </div>
     <div id="{{groupName}}" class="panel-collapse collapse">

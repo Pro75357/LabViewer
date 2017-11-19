@@ -25,9 +25,10 @@ chemPanel = {
     sodium: ['2947-0']
     , potassium: ['6298-4']
     , chloride: ['2069-3']
-    , bicarbonate: ['20565-8']
+    , bicarb: ['20565-8']
     , urea: ['6299-2']
-    ,creatinine: ['38483-4', '14682-9', '21232-4', '2160-0', '59826-8']
+    , creatinine: ['38483-4', '14682-9', '21232-4', '2160-0', '59826-8']
+    , eGFR: ['33914-3']
     //https://vsac.nlm.nih.gov/valueset/2.16.840.1.113883.3.666.5.2363/expansion
     ,glucose: ['15074-8','1557-8','1558-6','2339-0','2345-7','39480-9','39481-7','41651-1','41652-9']
     // add
@@ -57,7 +58,10 @@ chemOther = {
 
 vitals = {
     heightWeight: ['8302-2', '29463-7', '39156-5']
-    ,bloodPressure: ['55284-4'] // needs work
+    , bloodPressure: ['55284-4'] // needs work
+    , temperature: ['8331-1']
+    , heartRate: ['']
+    , respiratoryRate: ['']
 }
 
 
@@ -78,4 +82,4 @@ for (x in labGroups) {
     }
 }
 
-console.dir(allCodes)
+//console.dir(allCodes)
