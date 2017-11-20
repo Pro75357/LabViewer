@@ -29,22 +29,6 @@ Template.labTables.helpers({
 
 // Hematology tables here
 
-Template.redBloodTable.helpers({
-
-    groupName() {
-        return 'A1c'
-    },
-
-    dataArray() { // This works for now but need to figure out how to search all codes, not just the first one.
-        return Obs.find({ 'resource.code.coding.0.code': { $in: hematology.redBlood } }).fetch()
-    },
-
-    dataLength() {
-        return Obs.find({ 'resource.code.coding.0.code': { $in: hematology.redBlood } }).fetch().length
-    },
-
-})
-
 Template.whiteBloodTable.helpers({
 
     groupName() {
