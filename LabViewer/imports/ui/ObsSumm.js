@@ -44,14 +44,21 @@ Template.observationsSummary.events({
         newLabel = this.resource.code.coding[0].display
 
         //We will match the code with other ones in the Obs to get the data array. Would be nice to be able to match groups...
-        newData = { values: [], labels: [] }
+        newData = { values: [] }
         numbers = Obs.find({ 'resource.code.coding.0.code': code }).fetch()
         for (x in numbers){
         //    console.log(numbers[x].resource.valueQuantity.value)
-            newData.values.push(numbers[x].resource.valueQuantity.value)
-            newData.labels.push(numbers[x].resource.effectiveDateTime)
+            value = {
+                t: numbers[x].resource.effectiveDateTime,
+                y: numbers[x].resource.valueQuantity.value
+                
+            }
+            newData.values.push(value)
+            //newData.values.push(numbers[x].resource.valueQuantity.value)
+            //newData.labels.push(numbers[x].resource.effectiveDateTime)
         }
-            
+
+        console.dir(newData)    
         //console.log(Obs.find({ code: {"$in": labGroupA1c }}).fetch())
         //console.log(code)
         // Meteor.call('getOneCode', this.endpoint, this.patId, this.code,)       

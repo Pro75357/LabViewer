@@ -41,14 +41,14 @@ updateChart = function (newLabel, newData) {
             */
             // As you can see, a basic line chart will need two main data objects- labels, and datasets. 
             // labels is a basic array that stores the Y-axis categories. We can go ahead and define it with some placeholder values here
-            var labels = [0]
+            var labels = []
 
             // the datasets is an array of objects that each define an individual plot. Each object in datasets contains at least the following 
             // data: an array of data elements. this will map to the Y axis categories based on the index of the array.
             // label: not sure if required. Just labels this individual dataset. 
             // This also contains many optional components such as fillColor. 
             // Let's go ahead and define an empty dataset array
-            datasets = []
+            var datasets = []
 
             // Now lets make a default dataset object. Essentially a template object we can re-use. Pretty colors included. 
             //http://www.chartjs.org/docs/latest/charts/line.html#dataset-properties
@@ -57,7 +57,10 @@ updateChart = function (newLabel, newData) {
                 backgroundColor: 'transparent',
                 borderColor: 'blue', 
                 pointBackgroundColor: '#fffc77',                
-                data: [0]  // Just someplaceholder data
+                data: [{
+                        t: new Date(),
+                        y: 1
+                    }]  // Just someplaceholder data
             }
 
 
@@ -65,14 +68,14 @@ updateChart = function (newLabel, newData) {
             datasets.push(datasetobject)
 
             // Now that we have labels, and datasets we can build the top-level data object
-            data = {
-                labels,
+            var data = {
+               // labels,
                 datasets
             }
 
             // The last top-level config object is options. Since we are doing a time-based scale, we will set this as an option. 
             // time stuff http://www.chartjs.org/docs/latest/axes/cartesian/time.html
-            options = {
+            var options = {
                 scales: {
                     xAxes: [{
                         type: 'time',
@@ -107,9 +110,14 @@ updateChart = function (newLabel, newData) {
         // But, we're only concerned with the 'data' element within it for now
 
         // now, we can copy the datasetobject from above to use as a template
-        datasets = []
+        var datasets = []
     
         newdatasetobject = datasetobject
+        newdatasetobject.pointBackgroundColor = getRandomColor()
+
+        // If we want to change options: 
+        var newoptions = options
+
 
         // push this dataset object and new labels into the myChart object and update everything.
 
@@ -118,11 +126,11 @@ updateChart = function (newLabel, newData) {
 
         datasets.push(newdatasetobject)
 
-        myChart.data.labels = newData.labels
+        //myChart.data.labels = newData.labels
         myChart.data.datasets = datasets
         myChart.update();
-   //     console.dir(datasets)
-
+        
+        
 }
 
 function getRandomColor() {

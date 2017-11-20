@@ -96,4 +96,5 @@ for (x in labGroups) {
     }
 }
 
-console.dir(labGroups)
+// Uncomment this to have the entire labGroups object in the client console
+//console.dir(labGroups)
