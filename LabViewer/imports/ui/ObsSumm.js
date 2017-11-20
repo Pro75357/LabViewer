@@ -28,6 +28,10 @@ Template.observationsSummary.helpers({
         }
     },
 
+    vitalsCount() {
+        return Obs.find({ 'resource.code.coding.0.code': { $in: labGroups.vitals.all } }).fetch().length
+    },
+
         // We will need to create group-specific helpers for each lab type we want
 })
 
