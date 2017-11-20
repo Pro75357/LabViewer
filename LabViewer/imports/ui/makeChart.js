@@ -107,6 +107,14 @@ updateChart = function (newLabel, newData) {
         // We need to basically update the config object in the myChart object.
         // But, we're only concerned with the 'data' element within it for now
 
+        // First, check if that label already exists in the myChart datasets. Don't want to add two of the same thing...
+        
+        for (x in myChart.data.datasets) {
+            if (myChart.data.datasets[x].label === newLabel) {
+                return // if any match is found, just stop. This will exit the whole function.
+            }
+        }
+
         // now, we can copy the object from the current myChart to use as a template
 
         var newdatasetobject = {
