@@ -21,6 +21,7 @@
                         Choose a value to graph!
                         {{/if}}
                         {{> chartjs}}
+
                     </div>
                 </div>
             </div>
@@ -125,6 +126,10 @@
 <template name="chartjs">
     <div class="container-fluid">
         <canvas id="canvas" style="padding:20px;"></canvas>
+        {{#if chartRendered}}
+        <br />
+        <button class="button pull-right">Reset Chart</button>
+        {{/if}}
     </div>
 </template>
 

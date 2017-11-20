@@ -40,8 +40,9 @@ Template.observationsSummary.events({
         // need to call updateChart with newLabel = 'groupName' and newData = {Values:[],Labels[] }
 
         // we can build this object using the 'this' as well as Obs calls
-       // console.log(this)
-        newLabel = this.resource.code.coding[0].display
+        // console.log(this)
+        newLabel = this.resource.code.coding[0].display + ' (' + this.resource.valueQuantity.unit + ')'
+       // console.log(this.resource)
 
         //We will match the code with other ones in the Obs to get the data array. Would be nice to be able to match groups...
         newData = { values: [] }
@@ -58,7 +59,7 @@ Template.observationsSummary.events({
             //newData.labels.push(numbers[x].resource.effectiveDateTime)
         }
 
-        console.dir(newData)    
+     //   console.dir(newData)    
         //console.log(Obs.find({ code: {"$in": labGroupA1c }}).fetch())
         //console.log(code)
         // Meteor.call('getOneCode', this.endpoint, this.patId, this.code,)       

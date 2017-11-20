@@ -165,6 +165,18 @@ Template.patientSelect.events({
     },
 })
 
+Template.chartjs.events({
+    'click .button': function () {
+        resetChart()
+    }
+})
+
+Template.chartjs.helpers({
+    chartRendered() {
+        return Session.get('chartRendered')
+    }
+})
+
 
 Template.registerHelper('formatDate', function (date) {
     return moment(date).format('l, LT');
